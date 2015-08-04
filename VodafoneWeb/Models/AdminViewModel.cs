@@ -18,9 +18,13 @@ namespace VodafoneWeb.Models
         public string Id { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+        
+        //[Required(AllowEmptyStrings = false)]
+        //[Display(Name = "Email")]
+        //[EmailAddress]
+        //public string Email { get; set; }
 
         // Add the Address Info:
         public string Address { get; set; }

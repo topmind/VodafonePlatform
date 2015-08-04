@@ -92,8 +92,9 @@ namespace VodafoneWeb.Controllers
             {
                 var user = new ApplicationUser 
                 { 
-                    UserName = userViewModel.Email, Email = 
-                    userViewModel.Email, 
+                    //UserName = userViewModel.Email,
+                    UserName = userViewModel.Username,
+                    //Email = userViewModel.Email, 
                     // Add the Address Info:
                     Address = userViewModel.Address,
                     City = userViewModel.City,
@@ -156,7 +157,8 @@ namespace VodafoneWeb.Controllers
             return View(new EditUserViewModel()
             {
                 Id = user.Id,
-                Email = user.Email,
+                Username = user.UserName,
+                //Email = user.Email,
                 // Include the Addresss info:
                 Address = user.Address,
                 City = user.City,
@@ -175,7 +177,8 @@ namespace VodafoneWeb.Controllers
         // POST: /Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Email,Id,Address,City,State,PostalCode")] EditUserViewModel editUser, params string[] selectedRole)
+        //public async Task<ActionResult> Edit([Bind(Include = "Email,Id,Address,City,State,PostalCode")] EditUserViewModel editUser, params string[] selectedRole)
+        public async Task<ActionResult> Edit([Bind(Include = "Username,Email,Id,Address,City,State,PostalCode")] EditUserViewModel editUser, params string[] selectedRole)
         {
             if (ModelState.IsValid)
             {
@@ -185,8 +188,9 @@ namespace VodafoneWeb.Controllers
                     return HttpNotFound();
                 }
 
-                user.UserName = editUser.Email;
-                user.Email = editUser.Email;
+                //user.UserName = editUser.Email;
+                user.UserName = editUser.Username;
+                //user.Email = editUser.Email;
                 user.Address = editUser.Address;
                 user.City = editUser.City;
                 user.State = editUser.State;

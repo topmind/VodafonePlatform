@@ -31,19 +31,20 @@ namespace VodafoneWeb.Models
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
+                //RequireUniqueEmail = true
+                RequireUniqueEmail = false
             };
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequiredLength = 5,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
             // Configure user lockout defaults
-            manager.UserLockoutEnabledByDefault = true;
+            manager.UserLockoutEnabledByDefault = false;
             manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             manager.MaxFailedAccessAttemptsBeforeLockout = 5;
             // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
@@ -139,8 +140,9 @@ namespace VodafoneWeb.Models
         public static void InitializeIdentityForEF(ApplicationDbContext db) {
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
-            const string name = "admin@example.com";
-            const string password = "Admin@123456";
+            //const string name = "admin@example.com";
+            const string name = "admin";
+            const string password = "admin";
             const string roleName = "Admin";
 
             //Create Role Admin if it does not exist
@@ -152,7 +154,8 @@ namespace VodafoneWeb.Models
 
             var user = userManager.FindByName(name);
             if (user == null) {
-                user = new ApplicationUser { UserName = name, Email = name };
+                //user = new ApplicationUser { UserName = name, Email = name };
+                user = new ApplicationUser { UserName = name};
                 var result = userManager.Create(user, password);
                 result = userManager.SetLockoutEnabled(user.Id, false);
             }
