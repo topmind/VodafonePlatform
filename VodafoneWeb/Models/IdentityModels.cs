@@ -51,14 +51,14 @@ namespace VodafoneWeb.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        public ApplicationDbContext() : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
 
         static ApplicationDbContext()
         {
             Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
+            //Database.SetInitializer(new MySqlInitializer());
         }
 
         public static ApplicationDbContext Create()
