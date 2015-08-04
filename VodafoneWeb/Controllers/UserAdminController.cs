@@ -160,10 +160,10 @@ namespace VodafoneWeb.Controllers
                 Username = user.UserName,
                 //Email = user.Email,
                 // Include the Addresss info:
-                Address = user.Address,
-                City = user.City,
-                State = user.State,
-                PostalCode = user.PostalCode,
+                //Address = user.Address,
+                //City = user.City,
+                //State = user.State,
+                //PostalCode = user.PostalCode,
                 RolesList = RoleManager.Roles.ToList().Select(x => new SelectListItem()
                 {
                     Selected = userRoles.Contains(x.Name),
@@ -178,7 +178,8 @@ namespace VodafoneWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //public async Task<ActionResult> Edit([Bind(Include = "Email,Id,Address,City,State,PostalCode")] EditUserViewModel editUser, params string[] selectedRole)
-        public async Task<ActionResult> Edit([Bind(Include = "Username,Email,Id,Address,City,State,PostalCode")] EditUserViewModel editUser, params string[] selectedRole)
+        //public async Task<ActionResult> Edit([Bind(Include = "Username,Email,Id,Address,City,State,PostalCode")] EditUserViewModel editUser, params string[] selectedRole)
+        public async Task<ActionResult> Edit([Bind(Include = "Username,Id,Password,ConfirmPassword")] EditUserViewModel editUser, params string[] selectedRole)
         {
             if (ModelState.IsValid)
             {
@@ -191,10 +192,19 @@ namespace VodafoneWeb.Controllers
                 //user.UserName = editUser.Email;
                 user.UserName = editUser.Username;
                 //user.Email = editUser.Email;
-                user.Address = editUser.Address;
-                user.City = editUser.City;
-                user.State = editUser.State;
-                user.PostalCode = editUser.PostalCode;
+                //user.Address = editUser.Address;
+                //user.City = editUser.City;
+                //user.State = editUser.State;
+                //user.PostalCode = editUser.PostalCode;
+
+                string code = await UserManager.GeneratePasswordResetTokenAsync(editUser.Id.ToString());
+                var resultResetPassword = UserManager.ResetPasswordAsync(editUser.Id, code, editUser.Password);
+
+                if (!resultResetPassword.Result.Succeeded)
+                {
+                    ModelState.AddModelError("", resultResetPassword.Result.Errors.First());
+                    return View();
+                }
 
                 var userRoles = await UserManager.GetRolesAsync(user.Id);
 
