@@ -65,5 +65,7 @@ namespace VodafoneWeb.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<VodafoneWeb.Models.Dealer> Dealers { get; set; }
     }
 }
