@@ -1,0 +1,30 @@
+﻿@using VodafoneWeb.Models
+@model IEnumerable<VodafoneWeb.Models.Dealer>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Dealers</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-10">
+                @(Html.Kendo().DropDownList()
+                      .Name("dealerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                      .DataTextField("Name") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                      .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                      .BindTo(Model) //Pass the list of Dealers to the dropdownlist.
+                      .SelectedIndex(0) //Select an item with index 0\. Note that the indexes are zero based.
+                      )
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="EnterBtn" type="submit" value="Enter" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+

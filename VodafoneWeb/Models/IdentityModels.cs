@@ -67,5 +67,11 @@ namespace VodafoneWeb.Models
         }
 
         public System.Data.Entity.DbSet<VodafoneWeb.Models.Dealer> Dealers { get; set; }
+
+        public System.Data.Entity.DbSet<VodafoneWeb.Models.Product> Products { get; set; }
+
+        public System.Data.Entity.DbSet<VodafoneWeb.Models.PlanCategory> PlanCategories { get; set; }
+
+        public System.Data.Entity.DbSet<VodafoneWeb.Models.Plan> Plans { get; set; }
     }
 }

@@ -77,7 +77,8 @@ namespace VodafoneWeb .Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    //return RedirectToLocal(returnUrl); // disable it, because we always force user to index page after login
+                    return RedirectToAction("Index", "Home");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -339,7 +340,7 @@ namespace VodafoneWeb .Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -398,6 +399,7 @@ namespace VodafoneWeb .Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
+            HelperMethods.ClearDealerSelection();
             return RedirectToAction("Index", "Home");
         }
 

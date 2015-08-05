@@ -7,14 +7,22 @@ namespace VodafoneWeb
 {
     public static class HelperMethods
     {
-        public static string GetStoreId()
+        public static int? GetDealerId()
         {
-            return (string)HttpContext.Current.Session["StoreId"];
+            if (HttpContext.Current.Session["DealerId"] != null)
+                return (int)HttpContext.Current.Session["DealerId"];
+            else
+                return null;
         }
 
-        public static void SetStoreId(string id)
+        public static void SetDealerId(int id)
         {
-            HttpContext.Current.Session["StoreId"] = id;
+            HttpContext.Current.Session["DealerId"] = id;
+        }
+
+        public static void ClearDealerSelection()
+        {
+            HttpContext.Current.Session.Abandon();
         }
     }
 }
