@@ -14,11 +14,11 @@ namespace VodafoneWeb.Models
         {
         }
 
-        static ApplicationDbContext()
-        {
-            System.Data.Entity.Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
-            //Database.SetInitializer(new MySqlInitializer());
-        }
+        //static ApplicationDbContext()
+        //{
+        //    System.Data.Entity.Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
+        //    //Database.SetInitializer(new MySqlInitializer());
+        //}
 
         public static ApplicationDbContext Create()
         {

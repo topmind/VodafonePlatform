@@ -8,6 +8,8 @@
           columns.Bound(c => c.Pin);
           columns.ForeignKey(p => p.CategoryId, (System.Collections.IEnumerable)ViewData["categories"], "CategoryId", "CategoryName").Title("Category").Width(150);
           columns.ForeignKey(p => p.PlanId, (System.Collections.IEnumerable) ViewData["plans"], "PlanId", "PlanName").Title("Plan").Width(150);
+          columns.ForeignKey(p => p.UserId, (System.Collections.IEnumerable)ViewData["users"], "UserId", "UserName").Title("User").Width(150);
+          columns.ForeignKey(p => p.DealerId, (System.Collections.IEnumerable)ViewData["dealers"], "DealerId", "DealerCode").Title("Dealer").Width(150);
           //columns.Bound(c => c.LinkedPlan.Category.CategoryName);
           //columns.Bound(c => c.LinkedPlan.PlanName);
           columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(80);

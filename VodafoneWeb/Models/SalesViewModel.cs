@@ -23,6 +23,14 @@ namespace VodafoneWeb.Models
         public int CategoryId { get; set; }
 
         public SalesCategoryViewModule Category { get; set; }
+
+        public string UserId { get; set; }
+
+        public SalesUserViewModule User { get; set; }
+
+        public int DealerId { get; set; }
+
+        public DealerViewModel Dealer { get; set; }
     }
 
 }

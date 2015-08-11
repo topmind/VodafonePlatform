@@ -884,6 +884,7 @@
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationDbInitializer.cs" />
+    <Compile Include="Models\DealerViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Plan.cs" />
@@ -891,8 +892,10 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Dealer.cs" />
     <Compile Include="Models\SalesCategoryViewModule.cs" />
+    <Compile Include="Models\SalesDealerViewModel.cs" />
     <Compile Include="Models\SalesPlanViewModule.cs" />
     <Compile Include="Models\SalesTransaction.cs" />
+    <Compile Include="Models\SalesUserViewModule.cs" />
     <Compile Include="Models\SalesViewModel.cs" />
     <Compile Include="Models\InventoryModels.cs" />
     <Compile Include="MySqlConfiguration.cs">

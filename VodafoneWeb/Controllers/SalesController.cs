@@ -24,6 +24,8 @@ namespace VodafoneWeb.Controllers
         {
             ViewData["categories"] = db.Categories;
             ViewData["plans"] = db.Plans;
+            ViewData["users"] = db.Users.Select(u => new SalesUserViewModule {UserId = u.Id, Username = u.UserName});
+            ViewData["dealers"] = db.Dealers.Select(d => new DealerViewModel() { DealerId = d.DealerId, DealerCode = d.DealerCode, DealerName = d.DealerName});
             return View();
         }
 
@@ -70,9 +72,24 @@ namespace VodafoneWeb.Controllers
                     {
                         CategoryID = salestransaction.LinkedPlan.CategoryID,
                         CategoryName = salestransaction.LinkedPlan.Category.CategoryName
+                    },
+                    UserId = salestransaction.UserId,
+                    User = new SalesUserViewModule
+                    {
+                        UserId = salestransaction.User.Id,
+                        Username = salestransaction.User.UserName
+                    },
+                    DealerId = salestransaction.DealerId,
+                    Dealer = new DealerViewModel
+                    {
+                        DealerId = salestransaction.Dealer.DealerId, 
+                        DealerCode = salestransaction.Dealer.DealerCode,
+                        DealerName = salestransaction.Dealer.DealerName
                     }
-
                 });
+
+            data = data.Where(d => d.DealerId == HelperMethods.GetDealerId());
+                //.Where(salestransaction => salestransaction.DealerId == HelperMethods.GetDealerId());
 
             DataSourceResult result = data.ToDataSourceResult(request);
 
@@ -106,6 +123,13 @@ namespace VodafoneWeb.Controllers
         {
             if (salesTransaction != null && ModelState.IsValid)
             {
+                salesTransaction.UserId = User.Identity.GetUserId();
+                if(HelperMethods.GetDealerId().HasValue)
+                    salesTransaction.DealerId = HelperMethods.GetDealerId().GetValueOrDefault();
+                else
+                {
+                    return HttpNotFound("No Current Dealer Found");
+                }
                 db.SalesTransactions.Add(salesTransaction);
                 //await db.SaveChangesAsync();
             }

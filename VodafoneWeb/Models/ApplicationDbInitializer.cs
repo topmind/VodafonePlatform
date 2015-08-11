@@ -14,8 +14,8 @@ namespace VodafoneWeb.Models
     // This is useful if you do not want to tear down the database each time you run the application.
     // public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
     // This example shows you how to create a new database if the Model changes
-    //public class ApplicationDbInitializer :  DropCreateDatabaseAlways<ApplicationDbContext>
-    public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>     
+    //public class ApplicationDbInitializer :  DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+    public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>     
     {
         public void InitializeDatabase(ApplicationDbContext context)
         {
@@ -51,8 +51,8 @@ namespace VodafoneWeb.Models
         {
             var dealers = new List<Dealer>
             {
-                new Dealer {Name = "Swanston", DealerCode = "IDC141"},
-                new Dealer {Name = "Deakin", DealerCode = "IDC390"}
+                new Dealer {DealerName = "Swanston", DealerCode = "IDC141"},
+                new Dealer {DealerName = "Deakin", DealerCode = "IDC390"}
             };
             dealers.ForEach(d => context.Dealers.Add(d));
 
@@ -74,9 +74,9 @@ namespace VodafoneWeb.Models
             };
             plans.ForEach(p => context.Plans.Add(p));
 
-            var inventory1 = new Inventory { Dealer = dealers.Find(d => d.Name == "Swanston"), IMEI = "354380061969018", Product = products.Find(p => p.Name == "IPHONE 6 PLUS GOLD 16GB") };
+            var inventory1 = new Inventory { Dealer = dealers.Find(d => d.DealerName == "Swanston"), IMEI = "354380061969018", Product = products.Find(p => p.Name == "IPHONE 6 PLUS GOLD 16GB") };
             var InvetoryChangeHistory1 = new InvetoryChangeHistory {ChangeDate = DateTime.Now, Inventory = inventory1,OperationType = InventoryOperationType.In};
-            var inventory2 = new Inventory { Dealer = dealers.Find(d => d.Name == "Swanston"), IMEI = "356977061501200", Product = products.Find(p => p.Name == "IPHONE 6 SILVER 16GB") };
+            var inventory2 = new Inventory { Dealer = dealers.Find(d => d.DealerName == "Swanston"), IMEI = "356977061501200", Product = products.Find(p => p.Name == "IPHONE 6 SILVER 16GB") };
             var InvetoryChangeHistory2 = new InvetoryChangeHistory { ChangeDate = DateTime.Now, Inventory = inventory2, OperationType = InventoryOperationType.In };
 
             var InvetoryChangeHistoryList = new List<InvetoryChangeHistory>

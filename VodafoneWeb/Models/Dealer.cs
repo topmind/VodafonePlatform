@@ -12,8 +12,8 @@ namespace VodafoneWeb.Models
         {
             IsActive = true;
         }
-        public int ID { get; set; }
-        public string Name { get; set; }
+        public int DealerId { get; set; }
+        public string DealerName { get; set; }
         public string DealerCode { get; set; }
         [DefaultValue(true)]
         public bool IsActive { get; set; }

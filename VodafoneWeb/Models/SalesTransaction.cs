@@ -17,6 +17,14 @@ namespace VodafoneWeb.Models
         public virtual Plan LinkedPlan { get; set; }
         public string OrderNumber { get; set; }
 
+        public string UserId { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
+
+        public int DealerId { get; set; }
+
+        public virtual Dealer Dealer { get; set; }
+
         //public int InventoryID { get; set; }
 
         //public virtual Inventory LinkedInventory { get; set; }
