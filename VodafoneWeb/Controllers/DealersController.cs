@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity.Owin;
 using VodafoneWeb.Models;
 
 namespace VodafoneWeb.Controllers
@@ -15,6 +16,13 @@ namespace VodafoneWeb.Controllers
     public class DealersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        //private ApplicationDbContext db;
+
+        //public DealersController()
+        //{
+        //    this.db = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+        //}
 
         // GET: Dealers
         public async Task<ActionResult> Index()

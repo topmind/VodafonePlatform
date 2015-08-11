@@ -49,29 +49,29 @@ namespace VodafoneWeb.Models
     }
 
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
-    {
-        public ApplicationDbContext() : base("DefaultConnection", throwIfV1Schema: false)
-        {
-        }
+    //public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    //{
+    //    public ApplicationDbContext() : base("DefaultConnection", throwIfV1Schema: false)
+    //    {
+    //    }
 
-        static ApplicationDbContext()
-        {
-            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
-            //Database.SetInitializer(new MySqlInitializer());
-        }
+    //    static ApplicationDbContext()
+    //    {
+    //        Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
+    //        //Database.SetInitializer(new MySqlInitializer());
+    //    }
 
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
+    //    public static ApplicationDbContext Create()
+    //    {
+    //        return new ApplicationDbContext();
+    //    }
 
-        public System.Data.Entity.DbSet<VodafoneWeb.Models.Dealer> Dealers { get; set; }
+    //    public System.Data.Entity.DbSet<VodafoneWeb.Models.Dealer> Dealers { get; set; }
 
-        public System.Data.Entity.DbSet<VodafoneWeb.Models.Product> Products { get; set; }
+    //    public System.Data.Entity.DbSet<VodafoneWeb.Models.Product> Products { get; set; }
 
-        public System.Data.Entity.DbSet<VodafoneWeb.Models.PlanCategory> PlanCategories { get; set; }
+    //    public System.Data.Entity.DbSet<VodafoneWeb.Models.PlanCategory> PlanCategories { get; set; }
 
-        public System.Data.Entity.DbSet<VodafoneWeb.Models.Plan> Plans { get; set; }
-    }
+    //    public System.Data.Entity.DbSet<VodafoneWeb.Models.Plan> Plans { get; set; }
+    //}
 }

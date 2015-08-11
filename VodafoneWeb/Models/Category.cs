@@ -6,14 +6,14 @@ using System.Web;
 
 namespace VodafoneWeb.Models
 {
-    public class PlanCategory
+    public class Category
     {
-        public PlanCategory()
+        public Category()
         {
             IsActive = true;
         }
-        public int ID { get; set; }
-        public string Name { get; set; }
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
         [DefaultValue(true)]
         public bool IsActive { get; set; }
 

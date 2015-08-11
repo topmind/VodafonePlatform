@@ -12,14 +12,14 @@ namespace VodafoneWeb.Models
         {
             IsActive = true;
         }
-        public int ID { get; set; }
-        public string Name { get; set; }
+        public int PlanId { get; set; }
+        public string PlanName { get; set; }
         public string OfferCode { get; set; }
         [DefaultValue(true)]
         public bool IsActive { get; set; }
 
-        public int PlanCategoryID { get; set; }
+        public int CategoryID { get; set; }
 
-        public virtual PlanCategory PlanCategory { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

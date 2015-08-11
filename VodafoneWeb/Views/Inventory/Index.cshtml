@@ -1,0 +1,19 @@
+﻿﻿﻿@(Html.Kendo().Grid<VodafoneWeb.Models.Inventory>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+        columns.Bound(c => c.IMEI);
+        columns.Bound(c => c.InStock);
+        columns.Command(command => { command.Edit();}).Width(80);
+      })
+      .ToolBar(toolbar => toolbar.Create())
+          .Editable(editable => editable.Mode(GridEditMode.PopUp))
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+              .Model(model => model.Id( i => i.ID))
+          .Create(update => update.Action("Inventory_Create", "Inventory"))
+          .Read(read => read.Action("Inventories_Read", "Inventory"))
+                      .Update(update => update.Action("Inventory_Update", "Inventory"))
+      )
+)

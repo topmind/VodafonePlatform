@@ -14,8 +14,8 @@ namespace VodafoneWeb.Models
     // This is useful if you do not want to tear down the database each time you run the application.
     // public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
     // This example shows you how to create a new database if the Model changes
-    //public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
-    public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>     
+    //public class ApplicationDbInitializer :  DropCreateDatabaseAlways<ApplicationDbContext>
+    public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>     
     {
         public void InitializeDatabase(ApplicationDbContext context)
         {
@@ -58,10 +58,33 @@ namespace VodafoneWeb.Models
 
             var products = new List<Product>
             {
-                new Product {IMEI = "354380061969018",Name="IPHONE 6 PLUS GOLD 16GB"},
-                new Product {IMEI = "356977061501200", Name = "IPHONE 6 SILVER 16GB"}
+                new Product {Name="IPHONE 6 PLUS GOLD 16GB"},
+                new Product {Name = "IPHONE 6 SILVER 16GB"}
             };
             products.ForEach(p => context.Products.Add(p));
+
+            var planCategory1 = new Category { CategoryName = "New_voice_12m_and_24m" };
+            var planCategory2 = new Category { CategoryName = "Sim_Only" };
+            var plans = new List<Plan>
+            {
+                new Plan{PlanName = "Vodafone $40 24M-ON",OfferCode = "AU11044",Category = planCategory1},
+                new Plan{PlanName = "Vodafone $50 24M-ON",OfferCode = "AU11094",Category = planCategory1},
+                new Plan{PlanName = "Vodafone $30 SIMO-ON",OfferCode = "AU11056",Category = planCategory2},
+                new Plan{PlanName = "Vodafone $45 SIMO",OfferCode = "AU11059",Category = planCategory2}
+            };
+            plans.ForEach(p => context.Plans.Add(p));
+
+            var inventory1 = new Inventory { Dealer = dealers.Find(d => d.Name == "Swanston"), IMEI = "354380061969018", Product = products.Find(p => p.Name == "IPHONE 6 PLUS GOLD 16GB") };
+            var InvetoryChangeHistory1 = new InvetoryChangeHistory {ChangeDate = DateTime.Now, Inventory = inventory1,OperationType = InventoryOperationType.In};
+            var inventory2 = new Inventory { Dealer = dealers.Find(d => d.Name == "Swanston"), IMEI = "356977061501200", Product = products.Find(p => p.Name == "IPHONE 6 SILVER 16GB") };
+            var InvetoryChangeHistory2 = new InvetoryChangeHistory { ChangeDate = DateTime.Now, Inventory = inventory2, OperationType = InventoryOperationType.In };
+
+            var InvetoryChangeHistoryList = new List<InvetoryChangeHistory>
+            {
+                InvetoryChangeHistory1,
+                InvetoryChangeHistory2
+            };
+            InvetoryChangeHistoryList.ForEach(i => context.InvetoryChangeHistories.Add(i));
         }
 
         //Create User=Admin@Admin.com with password=Admin@123456 in the Admin role        

@@ -1,0 +1,85 @@
+﻿@model VodafoneWeb.Models.SalesViewModel
+
+<script type="text/javascript">
+    function filterPlans() {
+        return {
+            categoryId: $("#CategoryId").data("kendoDropDownList").value()
+        };
+    }
+</script>
+
+<fieldset>
+    <legend>New Record</legend>
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.FirstName):
+        </dt>
+        <dd>
+            @Html.TextBoxFor(m => m.FirstName)
+        </dd>
+    </dl>
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.LastName):
+        </dt>
+        <dd>
+            @Html.TextBoxFor(m => m.LastName)
+        </dd>
+    </dl>
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.MobileNumber):
+        </dt>
+        <dd>
+            @Html.TextBoxFor(m => m.MobileNumber)
+        </dd>
+    </dl>
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.Pin):
+        </dt>
+        <dd>
+            @Html.TextBoxFor(m => m.Pin)
+        </dd>
+    </dl>
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.CategoryId):
+        </dt>
+        <dd>
+            @(Html.Kendo().DropDownListFor(m => m.CategoryId)
+                  .AutoBind(false)
+                  .OptionLabel("Select Category...")
+                  .DataTextField("CategoryName")
+                  .DataValueField("CategoryId")
+                  .DataSource(dataSource =>
+                  {
+                      dataSource.Read(read => read.Action("GetCategories", "Sales"))
+                                .ServerFiltering(true);
+                  })
+            )
+            @Html.ValidationMessageFor(m => m.CategoryId)
+        </dd>
+    </dl>
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.PlanId):
+        </dt>
+        <dd>
+            @(Html.Kendo().DropDownListFor(m => m.PlanId)
+                  .AutoBind(false)
+                  .OptionLabel("Select Plan...")
+                  .DataTextField("PlanName")
+                  .DataValueField("PlanId")
+                  .DataSource(dataSource =>
+                  {
+                      dataSource.Read(read => read.Action("GetPlans", "Sales").Data("filterPlans"))
+                                .ServerFiltering(true);
+                  })
+                  .CascadeFrom("CategoryId")
+            )
+            @Html.ValidationMessageFor(m => m.PlanId)
+        </dd>
+    </dl>
+</fieldset>
+

@@ -1,0 +1,33 @@
+﻿﻿﻿@(Html.Kendo().Grid<VodafoneWeb.Models.SalesViewModel>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Bound(c => c.LastName);
+          columns.Bound(c => c.FirstName);
+          columns.Bound(c => c.MobileNumber);
+          columns.Bound(c => c.Pin);
+          columns.ForeignKey(p => p.CategoryId, (System.Collections.IEnumerable)ViewData["categories"], "CategoryId", "CategoryName").Title("Category").Width(150);
+          columns.ForeignKey(p => p.PlanId, (System.Collections.IEnumerable) ViewData["plans"], "PlanId", "PlanName").Title("Plan").Width(150);
+          //columns.Bound(c => c.LinkedPlan.Category.CategoryName);
+          //columns.Bound(c => c.LinkedPlan.PlanName);
+          columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(80);
+      })
+      .Scrollable()
+          .ToolBar(toolbar => toolbar.Create())
+                  .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("SalesPopupEditView"))
+          .Events(e => e.Edit("onEdit"))
+                  .DataSource(dataSource => dataSource
+          .Ajax()
+              .Model(model => model.Id(i => i.ID))
+                      .Create(update => update.Action("Sales_Create", "Sales"))
+          .Read(read => read.Action("Sales_Read", "Sales"))
+                  .Update(update => update.Action("Sales_Update", "Sales"))
+      )
+)
+
+<script>
+    function onEdit(e) {
+        //attach validator to the PopUp window
+        $("[data-role=window]").kendoValidator();
+    }
+</script>

@@ -14,7 +14,7 @@ namespace VodafoneWeb.Models
         }
         public int ID { get; set; }
         public string Name { get; set; }
-        public string IMEI { get; set; }
+        //public string IMEI { get; set; }
         [DefaultValue(true)]
         public bool IsActive { get; set; }
     }
