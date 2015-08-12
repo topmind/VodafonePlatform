@@ -9,6 +9,7 @@ namespace VodafoneWeb.Models
 {
     public class SalesViewModel
     {
+        [ScaffoldColumn(false)]
         public int ID { get; set; }
 
         public string LastName { get; set; }
@@ -30,6 +31,16 @@ namespace VodafoneWeb.Models
         public int DealerId { get; set; }
 
         public DealerViewModel Dealer { get; set; }
+
+        public int InventoryId { get; set; }
+
+        public SalesInventoryViewModel Inventory { get; set; }
+
+        public string IMEI { get; set; }
+
+        public int ProductId { get; set; }
+
+        public ProductViewModel Product { get; set; }
     }
 
 }

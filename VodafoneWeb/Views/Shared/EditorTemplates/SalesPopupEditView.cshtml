@@ -74,11 +74,48 @@
                   .DataSource(dataSource =>
                   {
                       dataSource.Read(read => read.Action("GetPlans", "Sales").Data("filterPlans"))
-                                .ServerFiltering(true);
+                          .ServerFiltering(true);
                   })
                   .CascadeFrom("CategoryId")
-            )
+                  )
             @Html.ValidationMessageFor(m => m.PlanId)
+        </dd>
+    </dl>
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.IMEI):
+        </dt>
+        <dd>
+            @(Html.Kendo().ComboBoxFor(m => m.InventoryId)
+                  .AutoBind(true)
+                  .DataTextField("IMEI")
+                  .DataValueField("InventoryId")
+                  .DataSource(dataSource =>
+                  {
+                      dataSource.Read(read => read.Action("GetIMEI", "Sales"))
+                                .ServerFiltering(true);
+                  })
+            )
+            @Html.ValidationMessageFor(m => m.IMEI)
+        </dd>
+    </dl>
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.ProductId):
+        </dt>
+        <dd>
+            @(Html.Kendo().DropDownListFor(m => m.ProductId)
+                  .AutoBind(true)
+                  .OptionLabel("Select Product...")
+                  .DataTextField("ProductName")
+                  .DataValueField("ProductId")
+                  .DataSource(dataSource =>
+                  {
+                      dataSource.Read(read => read.Action("GetProducts", "Sales"))
+                                .ServerFiltering(true);
+                  })
+            )
+            @Html.ValidationMessageFor(m => m.ProductId)
         </dd>
     </dl>
 </fieldset>

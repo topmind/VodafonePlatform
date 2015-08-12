@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,6 +8,7 @@ namespace VodafoneWeb.Models
 {
     public class SalesTransaction
     {
+        [ScaffoldColumn(false)]
         public int ID { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
@@ -24,6 +26,10 @@ namespace VodafoneWeb.Models
         public int DealerId { get; set; }
 
         public virtual Dealer Dealer { get; set; }
+
+        public int InventoryId { get; set; }
+
+        public virtual Inventory Inventory { get; set; }
 
         //public int InventoryID { get; set; }
 

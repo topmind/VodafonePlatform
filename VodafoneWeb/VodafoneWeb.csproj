@@ -891,8 +891,10 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Dealer.cs" />
+    <Compile Include="Models\ProductViewModel.cs" />
     <Compile Include="Models\SalesCategoryViewModule.cs" />
     <Compile Include="Models\SalesDealerViewModel.cs" />
+    <Compile Include="Models\SalesInventoryViewModel.cs" />
     <Compile Include="Models\SalesPlanViewModule.cs" />
     <Compile Include="Models\SalesTransaction.cs" />
     <Compile Include="Models\SalesUserViewModule.cs" />

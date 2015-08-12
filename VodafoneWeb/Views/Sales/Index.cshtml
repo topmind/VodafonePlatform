@@ -12,19 +12,23 @@
           columns.ForeignKey(p => p.DealerId, (System.Collections.IEnumerable)ViewData["dealers"], "DealerId", "DealerCode").Title("Dealer").Width(150);
           //columns.Bound(c => c.LinkedPlan.Category.CategoryName);
           //columns.Bound(c => c.LinkedPlan.PlanName);
+          columns.Bound(c => c.IMEI);
+          columns.ForeignKey(p => p.ProductId, (System.Collections.IEnumerable)ViewData["products"], "ProductId", "ProductName").Title("Product").Width(150);
           columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(80);
       })
-      .Scrollable()
+          .Scrollable()
+          .Resizable(resizing => resizing.Columns(true))
           .ToolBar(toolbar => toolbar.Create())
-                  .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("SalesPopupEditView"))
+          .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("SalesPopupEditView"))
           .Events(e => e.Edit("onEdit"))
-                  .DataSource(dataSource => dataSource
-          .Ajax()
-              .Model(model => model.Id(i => i.ID))
-                      .Create(update => update.Action("Sales_Create", "Sales"))
-          .Read(read => read.Action("Sales_Read", "Sales"))
-                      .Update(update => update.Action("Sales_Update", "Sales"))
-      )
+          .DataSource(
+                dataSource => dataSource
+                    .Ajax()
+                    .Model(model => model.Id(i => i.ID))
+                    .Create(update => update.Action("Sales_Create", "Sales"))
+                    .Read(read => read.Action("Sales_Read", "Sales"))
+                    .Update(update => update.Action("Sales_Update", "Sales"))
+          )
 )
 
 <script>

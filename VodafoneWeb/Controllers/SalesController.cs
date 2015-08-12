@@ -26,6 +26,7 @@ namespace VodafoneWeb.Controllers
             ViewData["plans"] = db.Plans;
             ViewData["users"] = db.Users.Select(u => new SalesUserViewModule {UserId = u.Id, Username = u.UserName});
             ViewData["dealers"] = db.Dealers.Select(d => new DealerViewModel() { DealerId = d.DealerId, DealerCode = d.DealerCode, DealerName = d.DealerName});
+            ViewData["products"] = db.Products.Select(p => new ProductViewModel(){ProductId = p.ID, ProductName = p.Name});
             return View();
         }
 
@@ -85,6 +86,19 @@ namespace VodafoneWeb.Controllers
                         DealerId = salestransaction.Dealer.DealerId, 
                         DealerCode = salestransaction.Dealer.DealerCode,
                         DealerName = salestransaction.Dealer.DealerName
+                    },
+                    InventoryId = salestransaction.InventoryId,
+                    Inventory = new SalesInventoryViewModel
+                    {
+                        InventoryId = salestransaction.Inventory.ID,
+                        IMEI = salestransaction.Inventory.IMEI
+                    },
+                    IMEI = salestransaction.Inventory.IMEI,
+                    ProductId = salestransaction.Inventory.Product.ID,
+                    Product = new ProductViewModel
+                    {
+                        ProductId = salestransaction.Inventory.Product.ID,
+                        ProductName = salestransaction.Inventory.Product.Name
                     }
                 });
 
@@ -139,7 +153,8 @@ namespace VodafoneWeb.Controllers
                     Pin = salesViewModel.Pin,
                     PlanId = salesViewModel.PlanId,
                     UserId = salesViewModel.UserId,
-                    DealerId = salesViewModel.DealerId
+                    DealerId = salesViewModel.DealerId,
+                    InventoryId = salesViewModel.InventoryId
                 };
 
                 db.SalesTransactions.Add(data);
@@ -191,6 +206,38 @@ namespace VodafoneWeb.Controllers
 
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetProducts()
+        {
+            var data = db.Products;
+
+            var list = new List<ProductViewModel>();
+            //list.Add(new Category{CategoryId = 1, CategoryName = "Cat 1"});
+            //list.Add(new Category { CategoryId = 2, CategoryName = "Cat 2" });
+
+            foreach (Product prd in data)
+            {
+                list.Add(new ProductViewModel { ProductId = prd.ID, ProductName = prd.Name });
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult GetIMEI()
+        {
+            var data = db.Inventories;
+
+            var list = new List<SalesInventoryViewModel>();
+            //list.Add(new Category{CategoryId = 1, CategoryName = "Cat 1"});
+            //list.Add(new Category { CategoryId = 2, CategoryName = "Cat 2" });
+
+            foreach (Inventory inventory in data)
+            {
+                list.Add(new SalesInventoryViewModel { InventoryId = inventory.ID, IMEI = inventory.IMEI });
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        
 
         //public JsonResult GetPlans()
         //{
