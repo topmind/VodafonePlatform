@@ -48,7 +48,7 @@
         </dt>
         <dd>
             @(Html.Kendo().DropDownListFor(m => m.CategoryId)
-                  .AutoBind(false)
+                  .AutoBind(true)
                   .OptionLabel("Select Category...")
                   .DataTextField("CategoryName")
                   .DataValueField("CategoryId")
@@ -67,7 +67,7 @@
         </dt>
         <dd>
             @(Html.Kendo().DropDownListFor(m => m.PlanId)
-                  .AutoBind(false)
+                  .AutoBind(true)
                   .OptionLabel("Select Plan...")
                   .DataTextField("PlanName")
                   .DataValueField("PlanId")

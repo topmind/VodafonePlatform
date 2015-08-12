@@ -23,7 +23,7 @@
               .Model(model => model.Id(i => i.ID))
                       .Create(update => update.Action("Sales_Create", "Sales"))
           .Read(read => read.Action("Sales_Read", "Sales"))
-                  .Update(update => update.Action("Sales_Update", "Sales"))
+                      .Update(update => update.Action("Sales_Update", "Sales"))
       )
 )
 

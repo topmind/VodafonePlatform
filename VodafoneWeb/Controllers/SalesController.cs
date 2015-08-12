@@ -119,23 +119,35 @@ namespace VodafoneWeb.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public async Task<ActionResult> Sales_Create([DataSourceRequest] DataSourceRequest request, SalesTransaction salesTransaction)
+        public async Task<ActionResult> Sales_Create([DataSourceRequest] DataSourceRequest request, SalesViewModel salesViewModel)
         {
-            if (salesTransaction != null && ModelState.IsValid)
+            if (salesViewModel != null && ModelState.IsValid)
             {
-                salesTransaction.UserId = User.Identity.GetUserId();
+                salesViewModel.UserId = User.Identity.GetUserId();
                 if(HelperMethods.GetDealerId().HasValue)
-                    salesTransaction.DealerId = HelperMethods.GetDealerId().GetValueOrDefault();
+                    salesViewModel.DealerId = HelperMethods.GetDealerId().GetValueOrDefault();
                 else
                 {
                     return HttpNotFound("No Current Dealer Found");
                 }
-                db.SalesTransactions.Add(salesTransaction);
-                //await db.SaveChangesAsync();
-            }
-            await db.SaveChangesAsync();
 
-            return Json(new[] { salesTransaction }.ToDataSourceResult(request, ModelState));
+                SalesTransaction data = new SalesTransaction
+                {
+                    LastName = salesViewModel.LastName,
+                    FirstName = salesViewModel.FirstName,
+                    MobileNumber = salesViewModel.MobileNumber,
+                    Pin = salesViewModel.Pin,
+                    PlanId = salesViewModel.PlanId,
+                    UserId = salesViewModel.UserId,
+                    DealerId = salesViewModel.DealerId
+                };
+
+                db.SalesTransactions.Add(data);
+                await db.SaveChangesAsync();
+            }
+            //salesTransaction.LinkedPlan = db.Plans.FirstOrDefault(p => p.PlanId == salesTransaction.PlanId);
+            //await db.SaveChangesAsync();
+            return Json(new[] { salesViewModel }.ToDataSourceResult(request, ModelState));
         }
 
         [AcceptVerbs(HttpVerbs.Post)]

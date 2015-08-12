@@ -9,7 +9,6 @@ namespace VodafoneWeb.Models
 {
     public class SalesViewModel
     {
-        [ScaffoldColumn(false)]
         public int ID { get; set; }
 
         public string LastName { get; set; }
