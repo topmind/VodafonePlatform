@@ -6,6 +6,22 @@
             categoryId: $("#CategoryId").data("kendoDropDownList").value()
         };
     }
+
+    function filterProduct() {
+        return {
+            inventoryId: $("#InventoryId").data("kendoComboBox").value()
+        };
+    }
+
+    function dataBound(e) {
+        if (this.dataSource.data().length == 1) {
+            var that = this;
+            setTimeout(function () {
+                that.select(1);
+                that.trigger("change");
+            });
+        }
+    }
 </script>
 
 <fieldset>
@@ -111,10 +127,13 @@
                   .DataValueField("ProductId")
                   .DataSource(dataSource =>
                   {
-                      dataSource.Read(read => read.Action("GetProducts", "Sales"))
+                      dataSource.Read(read => read.Action("GetProducts", "Sales").Data("filterProduct"))
                                 .ServerFiltering(true);
                   })
-            )
+                          .CascadeFrom("InventoryId")
+                          .Events(e => e.DataBound("dataBound"))
+                  )
+
             @Html.ValidationMessageFor(m => m.ProductId)
         </dd>
     </dl>

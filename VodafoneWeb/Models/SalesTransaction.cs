@@ -14,10 +14,13 @@ namespace VodafoneWeb.Models
         public string FirstName { get; set; }
         public string MobileNumber { get; set; }
         public string Pin { get; set; }
+        public string OrderNumber { get; set; }
+
+        public string PortinNumber { get; set; }
+
         //public int CategoryId { get; set; }
         public int PlanId { get; set; }
         public virtual Plan LinkedPlan { get; set; }
-        public string OrderNumber { get; set; }
 
         public string UserId { get; set; }
 
@@ -30,6 +33,16 @@ namespace VodafoneWeb.Models
         public int InventoryId { get; set; }
 
         public virtual Inventory Inventory { get; set; }
+
+        public DateTime CreateDateTime { get; set; }
+
+        public string RefferA { get; set; }
+
+        public string RefferB { get; set; }
+
+        public string Gift { get; set; }
+
+        public string Note { get; set; }
 
         //public int InventoryID { get; set; }
 

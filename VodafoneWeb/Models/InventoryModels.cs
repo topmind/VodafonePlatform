@@ -19,7 +19,7 @@ namespace VodafoneWeb.Models
     {
         public Inventory()
         {
-            InStock = true;
+            Status = InventoryOperationType.In;
         }
         [ScaffoldColumn(false)]
         public int ID { get; set; }
@@ -27,6 +27,7 @@ namespace VodafoneWeb.Models
         public virtual Dealer Dealer { get; set; }
 
         public virtual Product Product { get; set; }
+
         [Index(IsUnique = true)]
         public string IMEI { get; set; }
 
@@ -38,7 +39,7 @@ namespace VodafoneWeb.Models
 
         public DateTime? StockOutDate { get; set; }
 
-        public bool InStock { get; set; }
+        public InventoryOperationType Status { get; set; }
 
     }
 

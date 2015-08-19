@@ -677,6 +677,17 @@
     <Content Include="Views\Sales\Index.cshtml" />
     <Content Include="Views\Inventory\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\SalesPopupEditView.cshtml" />
+    <Content Include="Views\Dealers\SelectOtherDealer.cshtml" />
+    <Content Include="Views\Categories\Create.cshtml" />
+    <Content Include="Views\Categories\Delete.cshtml" />
+    <Content Include="Views\Categories\Details.cshtml" />
+    <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Plans\Create.cshtml" />
+    <Content Include="Views\Plans\Delete.cshtml" />
+    <Content Include="Views\Plans\Details.cshtml" />
+    <Content Include="Views\Plans\Edit.cshtml" />
+    <Content Include="Views\Plans\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -868,10 +879,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\DealersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PlansController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\SalesController.cs" />

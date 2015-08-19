@@ -21,35 +21,40 @@
 	<script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Vodafone Web", "Index", "Home", null, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @*@Html.Label("Vodafone Web", new { @class = "navbar-brand" })*@
+            @*@Html.ActionLink("Vodafone Web", "Index", "Home", null, new { @class = "navbar-brand" })*@
+            @Html.ActionLink("Vodafone Web", null, null, null, new {@class = "navbar-brand"})
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Sales", "Index", "Sales")</li>
-                    <li>@Html.ActionLink("Inventory", "Index", "Inventory")</li>
-                    <li>@Html.ActionLink("Dealer", "Index", "Dealers")</li>
-                    <li>@Html.ActionLink("Product", "Index", "Products")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                <li>@Html.ActionLink("Sales", "Index", "Sales")</li>
+                <li>@Html.ActionLink("Inventory", "Index", "Inventory")</li>
+                <li>@Html.ActionLink("Dealer", "Index", "Dealers")</li>
+                <li>@Html.ActionLink("Product", "Index", "Products")</li>
+                <li>@Html.ActionLink("Catgory", "Index", "Categories")</li>
+                <li>@Html.ActionLink("Plan", "Index", "Plans")</li>
 
-                    @if (Request.IsAuthenticated && User.IsInRole("Admin")) {
-                        <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
-                        <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
-                    }
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+                @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                        @*<li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>*@
+                    <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+                }
+            </ul>
+            @Html.Partial("_LoginPartial")
         </div>
     </div>
+</div>
     <div class="container body-content">
         @RenderBody()
         <hr />

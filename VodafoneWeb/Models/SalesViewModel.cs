@@ -16,6 +16,10 @@ namespace VodafoneWeb.Models
         public string FirstName { get; set; }
         public string MobileNumber { get; set; }
         public string Pin { get; set; }
+
+        public string OrderNumber { get; set; }
+
+        public string PortinNumber { get; set; }
         //public int CategoryId { get; set; }
         public int PlanId { get; set; }
         public SalesPlanViewModule Plan;
@@ -41,6 +45,16 @@ namespace VodafoneWeb.Models
         public int ProductId { get; set; }
 
         public ProductViewModel Product { get; set; }
+
+        public DateTime CreateDateTime { get; set; }
+
+        public string RefferA { get; set; }
+
+        public string RefferB { get; set; }
+
+        public string Gift { get; set; }
+
+        public string Note { get; set; }
     }
 
 }

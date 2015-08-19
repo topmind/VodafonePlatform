@@ -75,16 +75,23 @@ namespace VodafoneWeb.Models
             plans.ForEach(p => context.Plans.Add(p));
 
             var inventory1 = new Inventory { Dealer = dealers.Find(d => d.DealerName == "Swanston"), IMEI = "354380061969018", Product = products.Find(p => p.Name == "IPHONE 6 PLUS GOLD 16GB") };
-            var InvetoryChangeHistory1 = new InvetoryChangeHistory {ChangeDate = DateTime.Now, Inventory = inventory1,OperationType = InventoryOperationType.In};
+            //var InvetoryChangeHistory1 = new InvetoryChangeHistory {ChangeDate = DateTime.Now, Inventory = inventory1,OperationType = InventoryOperationType.In};
             var inventory2 = new Inventory { Dealer = dealers.Find(d => d.DealerName == "Swanston"), IMEI = "356977061501200", Product = products.Find(p => p.Name == "IPHONE 6 SILVER 16GB") };
-            var InvetoryChangeHistory2 = new InvetoryChangeHistory { ChangeDate = DateTime.Now, Inventory = inventory2, OperationType = InventoryOperationType.In };
+            //var InvetoryChangeHistory2 = new InvetoryChangeHistory { ChangeDate = DateTime.Now, Inventory = inventory2, OperationType = InventoryOperationType.In };
 
-            var InvetoryChangeHistoryList = new List<InvetoryChangeHistory>
+            //var InvetoryChangeHistoryList = new List<InvetoryChangeHistory>
+            //{
+            //    InvetoryChangeHistory1,
+            //    InvetoryChangeHistory2
+            //};
+            //InvetoryChangeHistoryList.ForEach(i => context.InvetoryChangeHistories.Add(i));
+
+            var inventories = new List<Inventory>
             {
-                InvetoryChangeHistory1,
-                InvetoryChangeHistory2
+                inventory1,
+                inventory2
             };
-            InvetoryChangeHistoryList.ForEach(i => context.InvetoryChangeHistories.Add(i));
+            inventories.ForEach(i => context.Inventories.Add(i));
         }
 
         //Create User=Admin@Admin.com with password=Admin@123456 in the Admin role        

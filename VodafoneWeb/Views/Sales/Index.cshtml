@@ -1,24 +1,34 @@
-﻿﻿﻿@(Html.Kendo().Grid<VodafoneWeb.Models.SalesViewModel>()
+﻿
+@(Html.Kendo().Grid<VodafoneWeb.Models.SalesViewModel>()
       .Name("grid")
       .Columns(columns =>
       {
-          columns.Bound(c => c.LastName);
-          columns.Bound(c => c.FirstName);
-          columns.Bound(c => c.MobileNumber);
-          columns.Bound(c => c.Pin);
+          columns.Bound(c => c.CreateDateTime).Format("{0: dd/MMM/yyyy}").Width(180);
+          columns.Bound(c => c.LastName).Width(180);
+          columns.Bound(c => c.FirstName).Width(180);
+          columns.Bound(c => c.MobileNumber).Width(180);
+          columns.Bound(c => c.Pin).Width(180);
+          columns.Bound(c => c.OrderNumber).Width(180);
+          columns.Bound(c => c.PortinNumber).Width(180);
           columns.ForeignKey(p => p.CategoryId, (System.Collections.IEnumerable)ViewData["categories"], "CategoryId", "CategoryName").Title("Category").Width(150);
           columns.ForeignKey(p => p.PlanId, (System.Collections.IEnumerable) ViewData["plans"], "PlanId", "PlanName").Title("Plan").Width(150);
           columns.ForeignKey(p => p.UserId, (System.Collections.IEnumerable)ViewData["users"], "UserId", "UserName").Title("User").Width(150);
           columns.ForeignKey(p => p.DealerId, (System.Collections.IEnumerable)ViewData["dealers"], "DealerId", "DealerCode").Title("Dealer").Width(150);
           //columns.Bound(c => c.LinkedPlan.Category.CategoryName);
           //columns.Bound(c => c.LinkedPlan.PlanName);
-          columns.Bound(c => c.IMEI);
+          columns.Bound(c => c.IMEI).Width(180);
           columns.ForeignKey(p => p.ProductId, (System.Collections.IEnumerable)ViewData["products"], "ProductId", "ProductName").Title("Product").Width(150);
+          columns.Bound(c => c.RefferA).Width(180);
+          columns.Bound(c => c.RefferB).Width(180);
+          columns.Bound(c => c.Gift).Width(180);
+          columns.Bound(c => c.Note).Width(180);
           columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(80);
       })
-          .Scrollable()
+                      .Scrollable(s => s.Height("600px"))
+                      .Filterable(ftb => ftb.Mode(GridFilterMode.Menu))
           .Resizable(resizing => resizing.Columns(true))
-          .ToolBar(toolbar => toolbar.Create())
+                  .NoRecords("No record")
+              .ToolBar(toolbar => toolbar.Create().Text("Create").HtmlAttributes(new { @title = "Create" }))
           .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("SalesPopupEditView"))
           .Events(e => e.Edit("onEdit"))
           .DataSource(

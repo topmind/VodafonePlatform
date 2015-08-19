@@ -12,10 +12,11 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 ﻿using Microsoft.AspNet.Identity;
 ﻿using VodafoneWeb.Models;
-﻿using SelectListItem = System.Web.WebPages.Html.SelectListItem;
+//﻿using SelectListItem = System.Web.WebPages.Html.SelectListItem;
 
 namespace VodafoneWeb.Controllers
 {
+    [Authorize]
     public class SalesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -62,6 +63,8 @@ namespace VodafoneWeb.Controllers
                     FirstName = salestransaction.FirstName,
                     MobileNumber = salestransaction.MobileNumber,
                     Pin = salestransaction.Pin,
+                    OrderNumber = salestransaction.OrderNumber,
+                    PortinNumber = salestransaction.PortinNumber,
                     PlanId = salestransaction.PlanId,
                     Plan = new SalesPlanViewModule
                     {
@@ -99,7 +102,12 @@ namespace VodafoneWeb.Controllers
                     {
                         ProductId = salestransaction.Inventory.Product.ID,
                         ProductName = salestransaction.Inventory.Product.Name
-                    }
+                    },
+                    CreateDateTime = salestransaction.CreateDateTime,
+                    RefferA = salestransaction.RefferA,
+                    RefferB = salestransaction.RefferB,
+                    Gift = salestransaction.Gift,
+                    Note = salestransaction.Note
                 });
 
             data = data.Where(d => d.DealerId == HelperMethods.GetDealerId());
@@ -110,27 +118,27 @@ namespace VodafoneWeb.Controllers
             return Json(result);
         }
 
-        private ICollection<SalesViewModel> SalesModelToSalesViewModel()
-        {
-            IQueryable<SalesTransaction> model = db.SalesTransactions;
+        //private ICollection<SalesViewModel> SalesModelToSalesViewModel()
+        //{
+        //    IQueryable<SalesTransaction> model = db.SalesTransactions;
 
-            ICollection<SalesViewModel> viewModel = new List<SalesViewModel>();
+        //    ICollection<SalesViewModel> viewModel = new List<SalesViewModel>();
 
-            foreach (var sales in model)
-            {
-                SalesViewModel vm = new SalesViewModel();
-                vm.ID = sales.ID;
-                vm.LastName = sales.LastName;
-                vm.FirstName = sales.FirstName;
-                vm.MobileNumber = sales.MobileNumber;
-                vm.Pin = sales.Pin;
+        //    foreach (var sales in model)
+        //    {
+        //        SalesViewModel vm = new SalesViewModel();
+        //        vm.ID = sales.ID;
+        //        vm.LastName = sales.LastName;
+        //        vm.FirstName = sales.FirstName;
+        //        vm.MobileNumber = sales.MobileNumber;
+        //        vm.Pin = sales.Pin;
                
 
-                viewModel.Add(vm);
-            }
+        //        viewModel.Add(vm);
+        //    }
 
-            return viewModel; 
-        }
+        //    return viewModel; 
+        //}
 
         [AcceptVerbs(HttpVerbs.Post)]
         public async Task<ActionResult> Sales_Create([DataSourceRequest] DataSourceRequest request, SalesViewModel salesViewModel)
@@ -145,16 +153,24 @@ namespace VodafoneWeb.Controllers
                     return HttpNotFound("No Current Dealer Found");
                 }
 
+                salesViewModel.CreateDateTime = DateTime.Now;
+
                 SalesTransaction data = new SalesTransaction
                 {
                     LastName = salesViewModel.LastName,
                     FirstName = salesViewModel.FirstName,
                     MobileNumber = salesViewModel.MobileNumber,
                     Pin = salesViewModel.Pin,
+                    OrderNumber = salesViewModel.OrderNumber,
+                    PortinNumber = salesViewModel.PortinNumber,
                     PlanId = salesViewModel.PlanId,
                     UserId = salesViewModel.UserId,
                     DealerId = salesViewModel.DealerId,
-                    InventoryId = salesViewModel.InventoryId
+                    InventoryId = salesViewModel.InventoryId,
+                    CreateDateTime = salesViewModel.CreateDateTime,
+                    RefferA = salesViewModel.RefferA,
+                    RefferB = salesViewModel.RefferB,
+                    Note = salesViewModel.Note
                 };
 
                 db.SalesTransactions.Add(data);
@@ -207,19 +223,27 @@ namespace VodafoneWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetProducts()
+        public JsonResult GetProducts(int inventoryId)
         {
-            var data = db.Products;
-
-            var list = new List<ProductViewModel>();
-            //list.Add(new Category{CategoryId = 1, CategoryName = "Cat 1"});
-            //list.Add(new Category { CategoryId = 2, CategoryName = "Cat 2" });
-
-            foreach (Product prd in data)
+            var firstOrDefault = db.Inventories.FirstOrDefault(i => i.ID == inventoryId);
+            if (firstOrDefault != null)
             {
-                list.Add(new ProductViewModel { ProductId = prd.ID, ProductName = prd.Name });
+                var data = firstOrDefault.Product;
+
+                if(data == null)
+                    return new JsonResult();
+
+                var list = new List<ProductViewModel>();
+                //list.Add(new Category{CategoryId = 1, CategoryName = "Cat 1"});
+                //list.Add(new Category { CategoryId = 2, CategoryName = "Cat 2" });
+
+                //foreach (Product prd in data)
+                //{
+                list.Add(new ProductViewModel { ProductId = data.ID, ProductName = data.Name });
+                //}
+                return Json(list, JsonRequestBehavior.AllowGet);
             }
-            return Json(list, JsonRequestBehavior.AllowGet);
+            return new JsonResult();
         }
 
 

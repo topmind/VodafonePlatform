@@ -30,7 +30,7 @@ namespace VodafoneWeb.Controllers
             DataSourceResult result = inventories.ToDataSourceResult(request, inventory => new {
                 ID = inventory.ID,
                 IMEI = inventory.IMEI,
-                InStock = inventory.InStock
+                InStock = inventory.Status
             });
 
             return Json(result);
@@ -45,15 +45,15 @@ namespace VodafoneWeb.Controllers
                 //await db.SaveChangesAsync();
             }
 
-            var invetoryChangeHistory = new InvetoryChangeHistory
-            {
-                ChangeDate = DateTime.Now,
-                Inventory = inventory,
-                OperatedByEmployeeID = User.Identity.GetUserId(),
-                OperationType = InventoryOperationType.In
-            };
+            //var invetoryChangeHistory = new InvetoryChangeHistory
+            //{
+            //    ChangeDate = DateTime.Now,
+            //    Inventory = inventory,
+            //    OperatedByEmployeeID = User.Identity.GetUserId(),
+            //    OperationType = InventoryOperationType.In
+            //};
 
-            db.InvetoryChangeHistories.Add(invetoryChangeHistory);
+            //db.InvetoryChangeHistories.Add(invetoryChangeHistory);
             await db.SaveChangesAsync();
 
             return Json(new[] { inventory }.ToDataSourceResult(request, ModelState));
@@ -69,6 +69,11 @@ namespace VodafoneWeb.Controllers
             }
 
             return Json(new[] { inventory }.ToDataSourceResult(request, ModelState));
+        }
+
+        public async Task<ActionResult> TransferTo(int? dealerId)
+        {
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

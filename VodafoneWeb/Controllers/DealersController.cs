@@ -139,7 +139,7 @@ namespace VodafoneWeb.Controllers
         {
             int selectedDealerId = int.Parse(Request.Form["DealerId"]);
             HelperMethods.SetDealerId(selectedDealerId);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Sales");
         }
 
         //public async Task<ActionResult> _SelectedDealer()
@@ -157,8 +157,24 @@ namespace VodafoneWeb.Controllers
         //    return PartialView(dealer);
         //}
 
+        // Get: Dealers/SelectOtherDealer
+        public ActionResult SelectOtherDealer()
+        {
+            int? currentDealerId = HelperMethods.GetDealerId();
+            if(!currentDealerId.HasValue)
+                return HttpNotFound();
+            var data = db.Dealers.Select(c => new DealerViewModel { DealerId = c.DealerId, DealerName = c.DealerName, DealerCode = c.DealerCode })
+                .Where(c => c.DealerId != currentDealerId.Value);
+            return PartialView(data);
+        }
 
-
+        // POST: Dealers/SelectOtherDealer/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public RedirectToRouteResult SelectOtherDealer(int DealerId)
+        {
+            return RedirectToAction("TransferTo", "Inventory", DealerId);
+        }
 
         protected override void Dispose(bool disposing)
         {

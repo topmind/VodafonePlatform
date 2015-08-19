@@ -3,10 +3,13 @@
       .Columns(columns =>
       {
         columns.Bound(c => c.IMEI);
-        columns.Bound(c => c.InStock);
-        columns.Command(command => { command.Edit();}).Width(80);
+        columns.Bound(c => c.Status);
+        columns.Command(c => c.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(80);
+        columns.Command(c => c.Custom("Transfer").Click("showDealerSelection"));
+          //columns.Command(command => { command.Edit(); }).HtmlAttributes(new { @title = "Edit" }).Width(80);
       })
-      .ToolBar(toolbar => toolbar.Create())
+          .ToolBar(toolbar => toolbar.Create().Text("Create").HtmlAttributes(new { @title = "Create" }))
+          .ToolBar(toolbar => toolbar.Custom().Text("ViewOutStock").HtmlAttributes(new {@title = "OutStock"}))
           .Editable(editable => editable.Mode(GridEditMode.PopUp))
       .Scrollable()
       .DataSource(dataSource => dataSource
@@ -16,4 +19,31 @@
           .Read(read => read.Action("Inventories_Read", "Inventory"))
                       .Update(update => update.Action("Inventory_Update", "Inventory"))
       )
-)
+        )
+
+<div>
+    @(Html.Kendo().Window()
+          .Name("window")
+          .Title("Choose Dealer")
+          .LoadContentFrom("SelectOtherDealer", "Dealers")
+          .Draggable(false)
+          .Actions(actions => { })
+          .Scrollable(false)
+          .Modal(true).Visible(false)
+          .HtmlAttributes(new { style = "margin: 10px" })
+    )
+</div>
+
+<script type="text/javascript">
+
+    function showDealerSelection(e) {
+        e.preventDefault();
+        $("#window").data("kendoWindow").open().center(true);
+    }
+</script>
+
+<style>
+    #window {
+        overflow-x: hidden;
+    }
+</style>
