@@ -29,6 +29,7 @@ namespace VodafoneWeb.Models
         public virtual Product Product { get; set; }
 
         [Index(IsUnique = true)]
+        [MaxLength(450)]
         public string IMEI { get; set; }
 
         public virtual ApplicationUser StockInBy { get; set; }

@@ -23,119 +23,185 @@
         }
     }
 </script>
-
-<fieldset>
-    <legend>New Record</legend>
-    <dl>
-        <dt>
-            @Html.LabelFor(m => m.FirstName):
-        </dt>
-        <dd>
-            @Html.TextBoxFor(m => m.FirstName)
-        </dd>
-    </dl>
-    <dl>
-        <dt>
-            @Html.LabelFor(m => m.LastName):
-        </dt>
-        <dd>
-            @Html.TextBoxFor(m => m.LastName)
-        </dd>
-    </dl>
-    <dl>
-        <dt>
-            @Html.LabelFor(m => m.MobileNumber):
-        </dt>
-        <dd>
-            @Html.TextBoxFor(m => m.MobileNumber)
-        </dd>
-    </dl>
-    <dl>
-        <dt>
-            @Html.LabelFor(m => m.Pin):
-        </dt>
-        <dd>
-            @Html.TextBoxFor(m => m.Pin)
-        </dd>
-    </dl>
-    <dl>
-        <dt>
-            @Html.LabelFor(m => m.CategoryId):
-        </dt>
-        <dd>
-            @(Html.Kendo().DropDownListFor(m => m.CategoryId)
-                  .AutoBind(true)
-                  .OptionLabel("Select Category...")
-                  .DataTextField("CategoryName")
-                  .DataValueField("CategoryId")
-                  .DataSource(dataSource =>
-                  {
-                      dataSource.Read(read => read.Action("GetCategories", "Sales"))
-                                .ServerFiltering(true);
-                  })
-            )
-            @Html.ValidationMessageFor(m => m.CategoryId)
-        </dd>
-    </dl>
-    <dl>
-        <dt>
-            @Html.LabelFor(m => m.PlanId):
-        </dt>
-        <dd>
-            @(Html.Kendo().DropDownListFor(m => m.PlanId)
-                  .AutoBind(true)
-                  .OptionLabel("Select Plan...")
-                  .DataTextField("PlanName")
-                  .DataValueField("PlanId")
-                  .DataSource(dataSource =>
-                  {
-                      dataSource.Read(read => read.Action("GetPlans", "Sales").Data("filterPlans"))
-                          .ServerFiltering(true);
-                  })
-                  .CascadeFrom("CategoryId")
-                  )
-            @Html.ValidationMessageFor(m => m.PlanId)
-        </dd>
-    </dl>
-    <dl>
-        <dt>
-            @Html.LabelFor(m => m.IMEI):
-        </dt>
-        <dd>
-            @(Html.Kendo().ComboBoxFor(m => m.InventoryId)
-                  .AutoBind(true)
-                  .DataTextField("IMEI")
-                  .DataValueField("InventoryId")
-                  .DataSource(dataSource =>
-                  {
-                      dataSource.Read(read => read.Action("GetIMEI", "Sales"))
-                                .ServerFiltering(true);
-                  })
-            )
-            @Html.ValidationMessageFor(m => m.IMEI)
-        </dd>
-    </dl>
-    <dl>
-        <dt>
-            @Html.LabelFor(m => m.ProductId):
-        </dt>
-        <dd>
-            @(Html.Kendo().DropDownListFor(m => m.ProductId)
-                  .AutoBind(true)
-                  .OptionLabel("Select Product...")
-                  .DataTextField("ProductName")
-                  .DataValueField("ProductId")
-                  .DataSource(dataSource =>
-                  {
-                      dataSource.Read(read => read.Action("GetProducts", "Sales").Data("filterProduct"))
-                                .ServerFiltering(true);
-                  })
+<div style="overflow: scroll; height: 600px; width: 500px">
+    <fieldset>
+        <legend>New Record</legend>
+        <div style="float: left;
+                                                                                                                            width: 55%;
+                                                                                                                            overflow: hidden;">
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.FirstName):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.FirstName)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.LastName):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.LastName)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.MobileNumber):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.MobileNumber)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.Pin):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.Pin)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.OrderNumber):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.OrderNumber)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.PortinNumber):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.PortinNumber)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.CategoryId):
+                </dt>
+                <dd>
+                    @(Html.Kendo().DropDownListFor(m => m.CategoryId)
+                          .AutoBind(true)
+                          .OptionLabel("Select Category...")
+                          .DataTextField("CategoryName")
+                          .DataValueField("CategoryId")
+                          .DataSource(dataSource =>
+                          {
+                              dataSource.Read(read => read.Action("GetCategories", "Sales"))
+                                  .ServerFiltering(true);
+                          })
+                          )
+                    @Html.ValidationMessageFor(m => m.CategoryId)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.PlanId):
+                </dt>
+                <dd>
+                    @(Html.Kendo().DropDownListFor(m => m.PlanId)
+                          .AutoBind(true)
+                          .OptionLabel("Select Plan...")
+                          .DataTextField("PlanName")
+                          .DataValueField("PlanId")
+                          .DataSource(dataSource =>
+                          {
+                              dataSource.Read(read => read.Action("GetPlans", "Sales").Data("filterPlans"))
+                                  .ServerFiltering(true);
+                          })
+                          .CascadeFrom("CategoryId")
+                          )
+                    @Html.ValidationMessageFor(m => m.PlanId)
+                </dd>
+            </dl>
+        </div>
+        <div style="overflow: hidden;">
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.IMEI):
+                </dt>
+                <dd>
+                    @(Html.Kendo().ComboBoxFor(m => m.InventoryId)
+                          .AutoBind(true)
+                          .DataTextField("IMEI")
+                          .DataValueField("InventoryId")
+                          .DataSource(dataSource =>
+                          {
+                              dataSource.Read(read => read.Action("GetIMEI", "Sales"))
+                                  .ServerFiltering(true);
+                          })
+                          )
+                    @Html.ValidationMessageFor(m => m.IMEI)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.ProductId):
+                </dt>
+                <dd>
+                    @(Html.Kendo().DropDownListFor(m => m.ProductId)
+                          .AutoBind(true)
+                          .OptionLabel("Select Product...")
+                          .DataTextField("ProductName")
+                          .DataValueField("ProductId")
+                          .DataSource(dataSource =>
+                          {
+                              dataSource.Read(read => read.Action("GetProducts", "Sales").Data("filterProduct"))
+                                  .ServerFiltering(true);
+                          })
                           .CascadeFrom("InventoryId")
                           .Events(e => e.DataBound("dataBound"))
-                  )
+                          )
 
-            @Html.ValidationMessageFor(m => m.ProductId)
-        </dd>
-    </dl>
-</fieldset>
+                    @Html.ValidationMessageFor(m => m.ProductId)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.RefferA):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.RefferA)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.RefferB):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.RefferB)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.Gift):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.Gift)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.Note):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.Note)
+                </dd>
+            </dl>
+        </div>
+    </fieldset>
+</div>
+<style>
+div.k-edit-form-container{
+      width: 90%;
+      height: auto;
 
+  }
+input[type="text"]{
+          -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+}
+</style>

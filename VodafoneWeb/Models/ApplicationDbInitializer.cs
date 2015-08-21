@@ -51,8 +51,9 @@ namespace VodafoneWeb.Models
         {
             var dealers = new List<Dealer>
             {
-                new Dealer {DealerName = "Swanston", DealerCode = "IDC141"},
-                new Dealer {DealerName = "Deakin", DealerCode = "IDC390"}
+                new Dealer {DealerName = "Burwood", DealerCode = "IDC167"},
+                new Dealer {DealerName = "Carlton", DealerCode = "IDC141"},
+                new Dealer {DealerName = "Malvern", DealerCode = "IDC052"}
             };
             dealers.ForEach(d => context.Dealers.Add(d));
 
@@ -74,9 +75,9 @@ namespace VodafoneWeb.Models
             };
             plans.ForEach(p => context.Plans.Add(p));
 
-            var inventory1 = new Inventory { Dealer = dealers.Find(d => d.DealerName == "Swanston"), IMEI = "354380061969018", Product = products.Find(p => p.Name == "IPHONE 6 PLUS GOLD 16GB") };
+            var inventory1 = new Inventory { Dealer = dealers.Find(d => d.DealerName == "Swanston"), IMEI = "354380061969018", Product = products.Find(p => p.Name == "IPHONE 6 PLUS GOLD 16GB"),StockInDate = DateTime.Now};
             //var InvetoryChangeHistory1 = new InvetoryChangeHistory {ChangeDate = DateTime.Now, Inventory = inventory1,OperationType = InventoryOperationType.In};
-            var inventory2 = new Inventory { Dealer = dealers.Find(d => d.DealerName == "Swanston"), IMEI = "356977061501200", Product = products.Find(p => p.Name == "IPHONE 6 SILVER 16GB") };
+            var inventory2 = new Inventory { Dealer = dealers.Find(d => d.DealerName == "Swanston"), IMEI = "356977061501200", Product = products.Find(p => p.Name == "IPHONE 6 SILVER 16GB"),StockInDate = DateTime.Now };
             //var InvetoryChangeHistory2 = new InvetoryChangeHistory { ChangeDate = DateTime.Now, Inventory = inventory2, OperationType = InventoryOperationType.In };
 
             //var InvetoryChangeHistoryList = new List<InvetoryChangeHistory>
