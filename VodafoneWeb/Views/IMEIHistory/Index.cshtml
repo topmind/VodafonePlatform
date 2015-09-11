@@ -23,6 +23,9 @@
       .Scrollable(s => s.Height("550px"))
       .DataSource(dataSource => dataSource
           .Ajax()
+          .Sort(s => { s.Add("IMEI").Ascending();
+              s.Add("ChangeDate").Ascending();
+          })
           .Read(read => read.Action("InvetoryChangeHistories_Read", "IMEIHistory"))
       )
 )
