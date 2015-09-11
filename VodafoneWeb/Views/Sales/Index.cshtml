@@ -1,6 +1,13 @@
-﻿
+﻿@using VodafoneWeb.Models
 @(Html.Kendo().Grid<VodafoneWeb.Models.SalesViewModel>()
       .Name("grid")
+      .RowAction(row =>
+    {
+        if (row.DataItem.Audit == AuditType.Incorrect)
+        {
+            row.HtmlAttributes["style"] = "background:red";
+        }
+    })
       .Columns(columns =>
       {
           columns.Bound(c => c.CreateDateTime).Format("{0: dd/MMM/yyyy}").Width(180);
@@ -17,20 +24,47 @@
           //columns.Bound(c => c.LinkedPlan.Category.CategoryName);
           //columns.Bound(c => c.LinkedPlan.PlanName);
           columns.Bound(c => c.IMEI).Width(180);
+          //columns.ForeignKey(p => p.ProductCategoryId, (System.Collections.IEnumerable)ViewData["productCategories"], "ProductCategoryId", "ProductCategoryName").Title("ProductCategory").Width(150);
           columns.ForeignKey(p => p.ProductId, (System.Collections.IEnumerable)ViewData["products"], "ProductId", "ProductName").Title("Product").Width(150);
           columns.Bound(c => c.RefferA).Width(180);
           columns.Bound(c => c.RefferB).Width(180);
           columns.Bound(c => c.Gift).Width(180);
+          columns.Bound(c => c.Audit).Hidden(!HttpContext.Current.User.IsInRole("Admin")).Width(180);
           columns.Bound(c => c.Note).Width(180);
+          columns.Bound(c => c.IsChanged);
           columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(80);
       })
+          .Pageable(p => p.PageSizes(true))
+        //  .ClientRowTemplate(
+        //    "<tr data-uid='#: uid #'>" +
+        //        "<td class='photo'>" +
+        //           "<img src='" + Url.Content("~/Content/web/Employees/") + "#:data.EmployeeID#.jpg' alt='#: data.EmployeeID #' />" +
+        //        "</td>" +
+        //        "<td class='details'>" +
+        //            "<span class='title'>#: Title #</span>" +
+        //            "<span class='description'>Name : #: FirstName# #: LastName#</span>" +
+        //            "<span class='description'>Country : #: Country# </span>" +
+        //        "</td>" +
+        //        "<td class='employeeID'>" +
+        //            "#: EmployeeID #" +
+        //        "</td>" +
+        //     "</tr>"
+        //)
                       .Scrollable(s => s.Height("550px"))
                       .Filterable(ftb => ftb.Mode(GridFilterMode.Menu))
           .Resizable(resizing => resizing.Columns(true))
                   .NoRecords("No record")
               .ToolBar(toolbar => toolbar.Create().Text("Create").HtmlAttributes(new { @title = "Create" }))
+                  .ToolBar(toolbar => toolbar.Excel())
+                      .Excel(excel => excel
+                .FileName("Sales Export.xlsx")
+                .Filterable(true)
+                .ProxyURL(Url.Action("Excel_Export_Save", "Sales"))
+            )
           .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("SalesPopupEditView"))
-          .Events(e => e.Edit("onEdit"))
+          .Events(e => { e.Edit("onEdit");
+                           e.DataBound("onDataBound");
+          })
           .DataSource(
                 dataSource => dataSource
                     .Ajax()
@@ -41,10 +75,75 @@
           )
 )
 
+<style>
+
+    .incorrectClass {
+        background-color: #FF0000;
+    }
+
+    .paidClass {
+        background-color: #CC99FF;
+    }
+
+    .unpaidClass {
+        background-color: #0066CC;
+        color: #EBF1DE;
+    }
+
+    .isChangedClass {
+        font-weight: bold;
+    }
+</style>
+
+
+
 <script>
     function onEdit(e) {
         //attach validator to the PopUp window
         $("[data-role=window]").kendoValidator();
+    }
+
+    function onDataBound(e) {
+
+        var isAdmin = "@HttpContext.Current.User.IsInRole("Admin")";
+        var bIsAdmin;
+        if (isAdmin == "True") {
+            bIsAdmin = true;
+        } else {
+            bIsAdmin = false;
+        }
+        //alert(bIsAdmin);
+        if (bIsAdmin)
+        {
+        var grid = $("#grid").data("kendoGrid");
+        var gridData = grid.dataSource.view();
+
+        for (var i = 0; i < gridData.length; i++) {
+            //get the item uid
+            var currentUid = gridData[i].uid;
+            //if the record fits the custom condition
+            if (gridData[i].Audit == 3) {
+                //find the row based on the uid and the custom class
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                $(currenRow).addClass("incorrectClass");
+            }
+            else if (gridData[i].Audit == 1) {
+                //find the row based on the uid and the custom class
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                $(currenRow).addClass("unpaidClass");
+            }
+            else if (gridData[i].Audit == 0) {
+                //find the row based on the uid and the custom class
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                $(currenRow).addClass("paidClass");
+            }
+            //alert(gridData[i].IsChanged);
+            if (gridData[i].IsChanged) {
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                $(currenRow).addClass("isChangedClass");
+            }
+        }
+}
     }
 </script>
 

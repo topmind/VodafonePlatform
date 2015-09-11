@@ -3,7 +3,7 @@ namespace VodafoneWeb.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Initial_Create : DbMigration
     {
         public override void Up()
         {
@@ -46,26 +46,34 @@ namespace VodafoneWeb.Migrations
                 "dbo.Inventories",
                 c => new
                     {
-                        ID = c.Int(nullable: false, identity: true),
+                        InventoryId = c.Int(nullable: false, identity: true),
+                        DealerId = c.Int(nullable: false),
+                        ProductId = c.Int(nullable: false),
                         IMEI = c.String(maxLength: 450),
+                        StockInById = c.String(maxLength: 128),
                         StockInDate = c.DateTime(nullable: false),
+                        StockOutById = c.String(maxLength: 128),
                         StockOutDate = c.DateTime(),
                         Status = c.Int(nullable: false),
-                        Dealer_DealerId = c.Int(),
-                        Product_ID = c.Int(),
-                        StockInBy_Id = c.String(maxLength: 128),
-                        StockOutBy_Id = c.String(maxLength: 128),
+                        Type = c.Int(),
+                        PurchasedFrom = c.String(),
+                        PurchasedById = c.String(maxLength: 128),
+                        DefferCode = c.String(),
+                        DefferName = c.String(),
+                        DefferOrderNo = c.String(),
+                        Note = c.String(),
                     })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.Dealers", t => t.Dealer_DealerId)
-                .ForeignKey("dbo.Products", t => t.Product_ID)
-                .ForeignKey("dbo.AspNetUsers", t => t.StockInBy_Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.StockOutBy_Id)
-                .Index(t => t.IMEI, unique: true)
-                .Index(t => t.Dealer_DealerId)
-                .Index(t => t.Product_ID)
-                .Index(t => t.StockInBy_Id)
-                .Index(t => t.StockOutBy_Id);
+                .PrimaryKey(t => t.InventoryId)
+                .ForeignKey("dbo.Dealers", t => t.DealerId, cascadeDelete: true)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetUsers", t => t.PurchasedById)
+                .ForeignKey("dbo.AspNetUsers", t => t.StockInById)
+                .ForeignKey("dbo.AspNetUsers", t => t.StockOutById)
+                .Index(t => t.DealerId)
+                .Index(t => t.ProductId)
+                .Index(t => t.StockInById)
+                .Index(t => t.StockOutById)
+                .Index(t => t.PurchasedById);
             
             CreateTable(
                 "dbo.Products",
@@ -74,8 +82,21 @@ namespace VodafoneWeb.Migrations
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(),
                         IsActive = c.Boolean(nullable: false),
+                        ProductCategoryId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.ID);
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.ProductCategories", t => t.ProductCategoryId, cascadeDelete: true)
+                .Index(t => t.ProductCategoryId);
+            
+            CreateTable(
+                "dbo.ProductCategories",
+                c => new
+                    {
+                        ProductCategoryId = c.Int(nullable: false, identity: true),
+                        ProductCategoryName = c.String(),
+                        IsActive = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.ProductCategoryId);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -153,36 +174,46 @@ namespace VodafoneWeb.Migrations
                         PlanId = c.Int(nullable: false),
                         UserId = c.String(maxLength: 128),
                         DealerId = c.Int(nullable: false),
-                        InventoryId = c.Int(nullable: false),
+                        InventoryId = c.Int(),
+                        ProductId = c.Int(nullable: false),
                         CreateDateTime = c.DateTime(nullable: false),
                         RefferA = c.String(),
                         RefferB = c.String(),
                         Gift = c.String(),
+                        Audit = c.Int(),
                         Note = c.String(),
+                        IsChanged = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.Dealers", t => t.DealerId, cascadeDelete: true)
-                .ForeignKey("dbo.Inventories", t => t.InventoryId, cascadeDelete: true)
+                .ForeignKey("dbo.Inventories", t => t.InventoryId)
                 .ForeignKey("dbo.Plans", t => t.PlanId, cascadeDelete: true)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId)
                 .Index(t => t.PlanId)
                 .Index(t => t.UserId)
                 .Index(t => t.DealerId)
-                .Index(t => t.InventoryId);
+                .Index(t => t.InventoryId)
+                .Index(t => t.ProductId);
             
             CreateTable(
                 "dbo.InvetoryChangeHistories",
                 c => new
                     {
-                        ID = c.Int(nullable: false, identity: true),
+                        InvetoryChangeHistoryId = c.Int(nullable: false, identity: true),
+                        IMEI = c.String(maxLength: 450),
                         ChangeDate = c.DateTime(nullable: false),
-                        OperationType = c.Int(nullable: false),
+                        OldOperationType = c.Int(nullable: false),
+                        NewOperationType = c.Int(nullable: false),
                         OperatedByEmployeeID = c.String(),
-                        Inventory_ID = c.Int(),
+                        SalesId = c.Int(),
+                        FromDealer = c.String(),
+                        ToDealer = c.String(),
                     })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.Inventories", t => t.Inventory_ID)
-                .Index(t => t.Inventory_ID);
+                .PrimaryKey(t => t.InvetoryChangeHistoryId)
+                .ForeignKey("dbo.SalesTransactions", t => t.SalesId)
+                .Index(t => t.IMEI)
+                .Index(t => t.SalesId);
             
             CreateTable(
                 "dbo.AspNetRoles",
@@ -201,21 +232,26 @@ namespace VodafoneWeb.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.InvetoryChangeHistories", "Inventory_ID", "dbo.Inventories");
+            DropForeignKey("dbo.InvetoryChangeHistories", "SalesId", "dbo.SalesTransactions");
             DropForeignKey("dbo.SalesTransactions", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.SalesTransactions", "ProductId", "dbo.Products");
             DropForeignKey("dbo.SalesTransactions", "PlanId", "dbo.Plans");
             DropForeignKey("dbo.SalesTransactions", "InventoryId", "dbo.Inventories");
             DropForeignKey("dbo.SalesTransactions", "DealerId", "dbo.Dealers");
-            DropForeignKey("dbo.Inventories", "StockOutBy_Id", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Inventories", "StockInBy_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Inventories", "StockOutById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Inventories", "StockInById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Inventories", "PurchasedById", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Inventories", "Product_ID", "dbo.Products");
-            DropForeignKey("dbo.Inventories", "Dealer_DealerId", "dbo.Dealers");
+            DropForeignKey("dbo.Inventories", "ProductId", "dbo.Products");
+            DropForeignKey("dbo.Products", "ProductCategoryId", "dbo.ProductCategories");
+            DropForeignKey("dbo.Inventories", "DealerId", "dbo.Dealers");
             DropForeignKey("dbo.Plans", "CategoryID", "dbo.Categories");
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
-            DropIndex("dbo.InvetoryChangeHistories", new[] { "Inventory_ID" });
+            DropIndex("dbo.InvetoryChangeHistories", new[] { "SalesId" });
+            DropIndex("dbo.InvetoryChangeHistories", new[] { "IMEI" });
+            DropIndex("dbo.SalesTransactions", new[] { "ProductId" });
             DropIndex("dbo.SalesTransactions", new[] { "InventoryId" });
             DropIndex("dbo.SalesTransactions", new[] { "DealerId" });
             DropIndex("dbo.SalesTransactions", new[] { "UserId" });
@@ -225,11 +261,12 @@ namespace VodafoneWeb.Migrations
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
-            DropIndex("dbo.Inventories", new[] { "StockOutBy_Id" });
-            DropIndex("dbo.Inventories", new[] { "StockInBy_Id" });
-            DropIndex("dbo.Inventories", new[] { "Product_ID" });
-            DropIndex("dbo.Inventories", new[] { "Dealer_DealerId" });
-            DropIndex("dbo.Inventories", new[] { "IMEI" });
+            DropIndex("dbo.Products", new[] { "ProductCategoryId" });
+            DropIndex("dbo.Inventories", new[] { "PurchasedById" });
+            DropIndex("dbo.Inventories", new[] { "StockOutById" });
+            DropIndex("dbo.Inventories", new[] { "StockInById" });
+            DropIndex("dbo.Inventories", new[] { "ProductId" });
+            DropIndex("dbo.Inventories", new[] { "DealerId" });
             DropIndex("dbo.Plans", new[] { "CategoryID" });
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.InvetoryChangeHistories");
@@ -238,6 +275,7 @@ namespace VodafoneWeb.Migrations
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
+            DropTable("dbo.ProductCategories");
             DropTable("dbo.Products");
             DropTable("dbo.Inventories");
             DropTable("dbo.Dealers");

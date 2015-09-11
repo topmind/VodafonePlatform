@@ -670,11 +670,6 @@
     <Content Include="Views\Dealers\Index.cshtml" />
     <Content Include="Views\Dealers\SelectDealer.cshtml" />
     <Content Include="Views\Dealers\_SelectedDealer.cshtml" />
-    <Content Include="Views\Products\Create.cshtml" />
-    <Content Include="Views\Products\Delete.cshtml" />
-    <Content Include="Views\Products\Details.cshtml" />
-    <Content Include="Views\Products\Edit.cshtml" />
-    <Content Include="Views\Products\Index.cshtml" />
     <Content Include="Views\Sales\Index.cshtml" />
     <Content Include="Views\Inventory\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\SalesPopupEditView.cshtml" />
@@ -689,6 +684,18 @@
     <Content Include="Views\Plans\Details.cshtml" />
     <Content Include="Views\Plans\Edit.cshtml" />
     <Content Include="Views\Plans\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InventoryPopupEditView.cshtml" />
+    <Content Include="Views\IMEIHistory\Index.cshtml" />
+    <Content Include="Views\ProductCategories\Create.cshtml" />
+    <Content Include="Views\ProductCategories\Delete.cshtml" />
+    <Content Include="Views\ProductCategories\Details.cshtml" />
+    <Content Include="Views\ProductCategories\Edit.cshtml" />
+    <Content Include="Views\ProductCategories\Index.cshtml" />
+    <Content Include="Views\Products\Create.cshtml" />
+    <Content Include="Views\Products\Delete.cshtml" />
+    <Content Include="Views\Products\Details.cshtml" />
+    <Content Include="Views\Products\Edit.cshtml" />
+    <Content Include="Views\Products\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -885,9 +892,11 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\DealersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IMEIHistoryController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PlansController.cs" />
+    <Compile Include="Controllers\ProductCategoriesController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
@@ -896,9 +905,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HelperMethods.cs" />
-    <Compile Include="Migrations\201508210157444_InitialCreate.cs" />
-    <Compile Include="Migrations\201508210157444_InitialCreate.Designer.cs">
-      <DependentUpon>201508210157444_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201509081344105_Initial_Create.cs" />
+    <Compile Include="Migrations\201509081344105_Initial_Create.Designer.cs">
+      <DependentUpon>201509081344105_Initial_Create.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509101226059_update_changehistory.cs" />
+    <Compile Include="Migrations\201509101226059_update_changehistory.Designer.cs">
+      <DependentUpon>201509101226059_update_changehistory.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -907,16 +920,20 @@
     <Compile Include="Models\ApplicationDbInitializer.cs" />
     <Compile Include="Models\DealerViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\InventoryChangeHistoryViewModel.cs" />
+    <Compile Include="Models\InventoryViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Plan.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Dealer.cs" />
+    <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Models\ProductViewModel.cs" />
     <Compile Include="Models\SalesCategoryViewModule.cs" />
     <Compile Include="Models\SalesDealerViewModel.cs" />
     <Compile Include="Models\SalesInventoryViewModel.cs" />
     <Compile Include="Models\SalesPlanViewModule.cs" />
+    <Compile Include="Models\SalesProductCategoryViewModel.cs" />
     <Compile Include="Models\SalesTransaction.cs" />
     <Compile Include="Models\SalesUserViewModule.cs" />
     <Compile Include="Models\SalesViewModel.cs" />
@@ -932,8 +949,11 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201508210157444_InitialCreate.resx">
-      <DependentUpon>201508210157444_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201509081344105_Initial_Create.resx">
+      <DependentUpon>201509081344105_Initial_Create.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509101226059_update_changehistory.resx">
+      <DependentUpon>201509101226059_update_changehistory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,28 @@
+﻿
+@(Html.Kendo().Grid<VodafoneWeb.Models.InventoryChangeHistoryViewModel>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+        columns.Bound(c => c.IMEI);
+        columns.Bound(c => c.ChangeDate).Format("{0: dd/MMM/yyyy HH:mm}");
+        columns.Bound(c => c.OldOperationType);
+        columns.Bound(c => c.NewOperationType);
+        columns.ForeignKey(p => p.OperatedByEmployeeID, (System.Collections.IEnumerable) ViewData["users"], "UserId", "UserName").Title("Operator");
+        columns.Bound(c => c.FromDealer);
+        columns.Bound(c => c.ToDealer);
+      })
+      .Pageable(p => p.PageSizes(true))
+      .Selectable(selectable => {
+            selectable.Mode(GridSelectionMode.Single);
+            selectable.Type(GridSelectionType.Row);
+      })
+      .Filterable(ftb => ftb.Mode(GridFilterMode.Menu))
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.SingleColumn);
+      })
+      .Scrollable(s => s.Height("550px"))
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Read(read => read.Action("InvetoryChangeHistories_Read", "IMEIHistory"))
+      )
+)

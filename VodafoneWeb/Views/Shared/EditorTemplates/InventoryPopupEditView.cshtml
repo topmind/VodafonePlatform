@@ -1,0 +1,187 @@
+﻿@using VodafoneWeb
+@using VodafoneWeb.Models
+@model VodafoneWeb.Models.InventoryViewModel
+
+<script type="text/javascript">
+    function dataBound(e) {
+        if (this.dataSource.data().length == 1) {
+            var that = this;
+            setTimeout(function () {
+                that.select(1);
+                that.trigger("change");
+            });
+        }
+    }
+
+    function onChange() {
+        var selectedType = $("#Type").data("kendoDropDownList").value();
+        if (selectedType == 2) {
+            $("#DefferDiv").hide();
+            $("#PurchaseDiv").show();
+            $("#PurchasedFrom").prop('required', true);
+            $("#DefferCode").prop('required', false);
+            $("#DefferName").prop('required', false);
+            $("#DefferOrderNo").prop('required', false);
+        }
+        else if (selectedType == 3) {
+            $("#PurchaseDiv").hide();
+            $("#DefferDiv").show();
+            $("#DefferCode").prop('required', true);
+            $("#DefferName").prop('required', true);
+            $("#DefferOrderNo").prop('required', true);
+            $("#PurchasedFrom").prop('required', false);
+        } else {
+            $("#DefferDiv").hide();
+            $("#PurchaseDiv").hide();
+            $("#PurchasedFrom").prop('required', false);
+            $("#DefferCode").prop('required', false);
+            $("#DefferName").prop('required', false);
+            $("#DefferOrderNo").prop('required', false);
+        }
+    }
+
+    function filterProduct() {
+        return {
+            productCategoryId: $("#ProductCategoryId").data("kendoDropDownList").value()
+        };
+    }
+</script>
+<div style="overflow: scroll; height: 600px; width: 500px">
+    <fieldset>
+        <legend>New Record</legend>
+        <div style="float: left; width: 55%; overflow: hidden;">
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.IMEI):
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.IMEI)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.ProductCategoryId):
+                </dt>
+                <dd>
+                    @(Html.Kendo().DropDownListFor(m => m.ProductCategoryId)
+                          .AutoBind(true)
+                          .OptionLabel("Select Product Category...")
+                          .DataTextField("ProductCategoryName")
+                          .DataValueField("ProductCategoryId")
+                          .DataSource(dataSource =>
+                          {
+                              dataSource.Read(read => read.Action("GetProductCategories", "Inventory"))
+                                  .ServerFiltering(true);
+                          })
+                    )
+                    @Html.ValidationMessageFor(m => m.ProductCategoryId)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.ProductId):
+                </dt>
+                <dd>
+                    @(Html.Kendo().DropDownListFor(m => m.ProductId)
+                          .AutoBind(true)
+                          .OptionLabel("Select Product...")
+                                  .DataTextField("ProductName")
+                                  .DataValueField("ProductId")
+                          .DataSource(dataSource =>
+                          {
+                              dataSource.Read(read => read.Action("GetProducts", "Inventory").Data("filterProduct"))
+                                  .ServerFiltering(true);
+                          })
+                          .CascadeFrom("ProductCategoryId")
+                          )
+                    @Html.ValidationMessageFor(m => m.ProductId)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.Type):
+                </dt>
+                <dd>
+                    @(
+    Html.Kendo().DropDownListFor(m => m.Type)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .BindTo(HelperMethods.EnumToSelectList(typeof (InventoryType)))
+        .Events(e => { e.Change("onChange"); })
+                          )
+                </dd>
+            </dl>
+        </div>
+    @*<div id="PurchaseDiv" style="overflow: hidden; @(Model.Type == InventoryType.Purchased ? "display:block" : "display: none")">*@
+        <div id="PurchaseDiv" style="overflow: hidden; display:none">
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.PurchasedFrom)
+        </dt>
+        <dd>
+            @Html.TextBoxFor(m => m.PurchasedFrom)
+        </dd>
+    </dl>
+    <dl>
+        <dt>
+            @Html.LabelFor(m => m.PurchasedById):
+        </dt>
+        <dd>
+            @(Html.Kendo().DropDownListFor(m => m.PurchasedById)
+                              .AutoBind(true)
+                              .ValuePrimitive(true)
+                              .OptionLabel("Select User...")
+                                      .DataTextField("UserName")
+                                      .DataValueField("Id")
+                              //.Items(items => { items.Add().Text("admin").Value("de9a3e3d-55aa-4145-a6c1-a488545b0a01"); })
+                              .DataSource(dataSource =>
+                              {
+                                  dataSource.Read(read => read.Action("GetUsers", "Inventory"))
+                                      .ServerFiltering(true);
+                              })
+            )
+            @Html.ValidationMessageFor(m => m.PurchasedById)
+        </dd>
+    </dl>
+</div>
+        <div id="DefferDiv" style="overflow: hidden; display: none">
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.DefferCode)
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.DefferCode)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.DefferName)
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.DefferName)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.DefferOrderNo)
+                </dt>
+                <dd>
+                    @Html.TextBoxFor(m => m.DefferOrderNo)
+                </dd>
+            </dl>
+        </div>
+    </fieldset>
+
+</div>
+<style>
+div.k-edit-form-container{
+      width: 90%;
+      height: auto;
+
+  }
+input[type="text"]{
+          -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+}
+</style>

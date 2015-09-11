@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace VodafoneWeb.Models
 {
+    public enum AuditType
+    {
+        Paid,
+        Unpaid,
+        Claim,
+        Incorrect
+    }
     public class SalesTransaction
     {
         [ScaffoldColumn(false)]
@@ -30,9 +38,13 @@ namespace VodafoneWeb.Models
 
         public virtual Dealer Dealer { get; set; }
 
-        public int InventoryId { get; set; }
+        public int? InventoryId { get; set; }
 
         public virtual Inventory Inventory { get; set; }
+
+        public int ProductId { get; set; }
+
+        public virtual Product Product { get; set; }
 
         public DateTime CreateDateTime { get; set; }
 
@@ -42,7 +54,11 @@ namespace VodafoneWeb.Models
 
         public string Gift { get; set; }
 
+        public AuditType? Audit { get; set; }
+
         public string Note { get; set; }
+
+        public bool IsChanged { get; set; }
 
         //public int InventoryID { get; set; }
 

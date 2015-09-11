@@ -11,7 +11,6 @@ using VodafoneWeb.Models;
 
 namespace VodafoneWeb.Controllers
 {
-    [Authorize]
     public class ProductsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -19,7 +18,8 @@ namespace VodafoneWeb.Controllers
         // GET: Products
         public async Task<ActionResult> Index()
         {
-            return View(await db.Products.ToListAsync());
+            var products = db.Products.Include(p => p.ProductCategory);
+            return View(await products.ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -40,6 +40,7 @@ namespace VodafoneWeb.Controllers
         // GET: Products/Create
         public ActionResult Create()
         {
+            ViewBag.ProductCategoryId = new SelectList(db.ProductCategories, "ProductCategoryId", "ProductCategoryName");
             return View();
         }
 
@@ -48,7 +49,7 @@ namespace VodafoneWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,Name,IMEI,IsActive")] Product product)
+        public async Task<ActionResult> Create([Bind(Include = "ID,Name,IsActive,ProductCategoryId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -57,6 +58,7 @@ namespace VodafoneWeb.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.ProductCategoryId = new SelectList(db.ProductCategories, "ProductCategoryId", "ProductCategoryName", product.ProductCategoryId);
             return View(product);
         }
 
@@ -72,6 +74,7 @@ namespace VodafoneWeb.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.ProductCategoryId = new SelectList(db.ProductCategories, "ProductCategoryId", "ProductCategoryName", product.ProductCategoryId);
             return View(product);
         }
 
@@ -80,7 +83,7 @@ namespace VodafoneWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,IMEI,IsActive")] Product product)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,IsActive,ProductCategoryId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -88,6 +91,7 @@ namespace VodafoneWeb.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            ViewBag.ProductCategoryId = new SelectList(db.ProductCategories, "ProductCategoryId", "ProductCategoryName", product.ProductCategoryId);
             return View(product);
         }
 

@@ -1,24 +1,50 @@
-﻿﻿﻿@(Html.Kendo().Grid<VodafoneWeb.Models.Inventory>()
+﻿
+﻿@(Html.Kendo().Grid<VodafoneWeb.Models.InventoryViewModel>()
       .Name("grid")
       .Columns(columns =>
       {
-        columns.Bound(c => c.IMEI);
-        columns.Bound(c => c.Status);
-        columns.Command(c => c.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(80);
-        columns.Command(c => c.Custom("Transfer").Click("showDealerSelection"));
+          columns.Bound(i => i.StockInDate).Format("{0: dd/MMM/yyyy}").Width(180);
+          columns.ForeignKey(i => i.StockInUserId, (System.Collections.IEnumerable)ViewData["users"], "UserId", "UserName").Title("StockInUser").Width(150);
+        columns.Bound(i => i.IMEI).Width(150);
+        columns.ForeignKey(i => i.ProductId, (System.Collections.IEnumerable)ViewData["products"], "ProductId", "ProductName").Title("Product").Width(150);
+        columns.Bound(i => i.StockOutDate).Format("{0: dd/MMM/yyyy}").Width(150);
+          columns.ForeignKey(i => i.StockOutUserId, (System.Collections.IEnumerable)ViewData["users"], "UserId", "UserName").Title("StockOutUser").Width(150);
+        columns.Bound(i => i.Status).Width(150);
+          columns.Bound(i => i.Note).Width(180);
+          columns.Bound(i => i.Type).Width(150);
+          columns.Bound(i => i.PurchasedFrom).Width(150);
+          columns.ForeignKey(i => i.PurchasedById, (System.Collections.IEnumerable)ViewData["users"], "UserId", "UserName").Title("PurchasedBy").Width(150);
+          columns.Bound(i => i.DefferCode).Width(150);
+          columns.Bound(i => i.DefferName).Width(150);
+          columns.Bound(i => i.DefferOrderNo).Width(150);
+        columns.Command(i => i.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(80);
+        columns.Command(i => i.Custom("Transfer").SendDataKeys(true).Click("showDealerSelection")).Width(80);
           //columns.Command(command => { command.Edit(); }).HtmlAttributes(new { @title = "Edit" }).Width(80);
       })
+          .Pageable(p => p.PageSizes(true))
           .ToolBar(toolbar => toolbar.Create().Text("Create").HtmlAttributes(new { @title = "Create" }))
-          .ToolBar(toolbar => toolbar.Custom().Text("ViewOutStock").HtmlAttributes(new {@title = "OutStock"}))
-          .Editable(editable => editable.Mode(GridEditMode.PopUp))
-      .Scrollable()
+          //.ToolBar(toolbar => toolbar.Custom().Text("ViewOutStock").HtmlAttributes(new {@title = "OutStock"}))
+              .ToolBar(toolbar => toolbar.Excel())
+              .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("InventoryPopupEditView"))
+          .Scrollable(s => s.Height("550px"))
+              .Excel(excel => excel
+            .FileName("Inventory Export.xlsx")
+            .Filterable(true)
+            .ProxyURL(Url.Action("Excel_Export_Save", "Inventory"))
+        )
+              .Filterable(ftb => ftb.Mode(GridFilterMode.Menu))
+              .Resizable(resizing => resizing.Columns(true))
+              .Reorderable(reordering => reordering.Columns(true))
+                      .NoRecords("No record")
       .DataSource(dataSource => dataSource
           .Ajax()
               .Model(model => model.Id( i => i.ID))
+                  .Sort(sort => sort.Add("StockInDate").Descending())
           .Create(update => update.Action("Inventory_Create", "Inventory"))
           .Read(read => read.Action("Inventories_Read", "Inventory"))
                       .Update(update => update.Action("Inventory_Update", "Inventory"))
-      )
+
+              ).Events(e => { e.Edit("edit"); e.DataBound("onDataBound"); })
         )
 
 <div>
@@ -27,18 +53,68 @@
           .Title("Choose Dealer")
           .LoadContentFrom("SelectOtherDealer", "Dealers")
           .Draggable(false)
-          .Actions(actions => { })
           .Scrollable(false)
           .Modal(true).Visible(false)
-          .HtmlAttributes(new { style = "margin: 10px" })
-    )
+          .HtmlAttributes(new {style = "margin: 10px"})
+          )
 </div>
+
+<style>
+    .isOutClass {
+        background-color: #BFBFBF;
+    }
+</style>
+
 
 <script type="text/javascript">
 
     function showDealerSelection(e) {
         e.preventDefault();
+        //var grid = $("#grid").data("kendoGrid");
+        //alert(grid);
+        ////var dataItem = grid.dataItem($(e.srcElement).closest("tr"));
+        //var dataItem = grid.dataItem($(this));
+        //alert(dataItem);
+
+        var item = this.dataItem($(e.currentTarget).closest("tr"));
+        $("#window").data("kendoWindow").refresh({ url: "/Dealers/SelectOtherDealer",data:{inventoryId: item.ID} });
         $("#window").data("kendoWindow").open().center(true);
+    }
+
+    function edit(e) {
+        var dropdownlist = $("#Type").data("kendoDropDownList");
+
+        dropdownlist.trigger("change");
+    }
+
+    function onDataBound() {
+
+        var grid = $("#grid").data("kendoGrid");
+        var gridData = grid.dataSource.view();
+
+        for (var i = 0; i < gridData.length; i++) {
+            //get the item uid
+            var currentUid = gridData[i].uid;
+            //if the record fits the custom condition
+            if (gridData[i].Status == 1 || gridData[i].Status == 3 || gridData[i].Status == 4) {
+                //find the row based on the uid and the custom class
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                $(currenRow).addClass("isOutClass");
+            }
+        }
+
+
+        //Selects all edit buttons
+        $("#grid tbody tr .k-grid-Transfer").each(function() {
+            var currentDataItem = $("#grid").data("kendoGrid").dataItem($(this).closest("tr"));
+
+            //Check in the current dataItem if the row is editable
+            if (currentDataItem.Status == 1 || currentDataItem.Status == 3 || currentDataItem.Status == 4) {
+                $(this).remove();
+            }
+
+
+        });
     }
 </script>
 

@@ -21,6 +21,14 @@ namespace VodafoneWeb.Models
         //    //Database.SetInitializer(new MySqlInitializer());
         //}
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+
+            //modelBuilder.Entity<Dealer>().HasMany(i => i.Sales).WithRequired().WillCascadeOnDelete(false);
+            //modelBuilder.Entity<Dealer>().HasMany(i => i.Inventories).WithRequired().WillCascadeOnDelete(false);
+            base.OnModelCreating(modelBuilder);
+        }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
@@ -39,5 +47,7 @@ namespace VodafoneWeb.Models
         public System.Data.Entity.DbSet<VodafoneWeb.Models.Inventory> Inventories { get; set; }
 
         public System.Data.Entity.DbSet<VodafoneWeb.Models.InvetoryChangeHistory> InvetoryChangeHistories { get; set; }
+
+        public System.Data.Entity.DbSet<VodafoneWeb.Models.ProductCategory> ProductCategories { get; set; }
     }
 }

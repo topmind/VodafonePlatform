@@ -8,6 +8,8 @@ namespace VodafoneWeb.Models
 {
     public class SalesInventoryViewModel
     {
+        public InventoryType? Type { get; set; }
+        
         public int InventoryId { get; set; }
 
         public string IMEI { get; set; }

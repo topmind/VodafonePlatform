@@ -1,4 +1,6 @@
-﻿@model VodafoneWeb.Models.SalesViewModel
+﻿@using VodafoneWeb
+@using VodafoneWeb.Models
+@model VodafoneWeb.Models.SalesViewModel
 
 <script type="text/javascript">
     function filterPlans() {
@@ -9,7 +11,20 @@
 
     function filterProduct() {
         return {
-            inventoryId: $("#InventoryId").data("kendoComboBox").value()
+            inventoryId: $("#InventoryId").data("kendoDropDownList").value(),
+            productCategoryId: $("#ProductCategoryId").data("kendoDropDownList").value()
+        };
+    }
+
+    function filterProductCategory() {
+        return {
+            inventoryId: $("#InventoryId").data("kendoDropDownList").value()
+        };
+    }
+
+    function filterIMEIs() {
+        return {
+            type: $("#Type").data("kendoDropDownList").value()
         };
     }
 
@@ -22,19 +37,45 @@
             });
         }
     }
+
+    function onChange() {
+        var selectid = $("#InventoryId").data("kendoDropDownList").value();
+        $.getJSON("Sales/GetProductCategories?inventoryId=" + selectid, function (data) {
+            $("#ProductCategoryId").data("kendoDropDownList").dataSource.data(data);
+        });
+        $.getJSON("Sales/GetProducts?inventoryId=" + selectid, function (data) {
+             $("#ProductId").data("kendoDropDownList").dataSource.data(data);
+        });
+        
+    }
+
+    function onPlanChange() {
+        var selectid = $("#PlanId").data("kendoDropDownList").value();
+        if (selectid == 1)
+        {
+            $('#Note').val ("Outright");
+        }
+    }
+
+    //    function onIMEICascade(e) {
+    //        $("#ProductId").data("kendoDropDownList").DataSource.read();
+    //    }
+
+
+    //function onPrdCategoryCasecade(e) {
+    //    $("#ProductId").data("kendoDropDownList").DataSource.read();
+    //}
 </script>
-<div style="overflow: scroll; height: 600px; width: 500px">
+<div style="overflow: scroll; height: 670px; width: 600px; padding-left: 3px">
     <fieldset>
         <legend>New Record</legend>
-        <div style="float: left;
-                                                                                                                            width: 55%;
-                                                                                                                            overflow: hidden;">
+        <div style="float: left; width: 50%; overflow: hidden;">
             <dl>
                 <dt>
                     @Html.LabelFor(m => m.FirstName):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.FirstName)
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "wide" })
                 </dd>
             </dl>
             <dl>
@@ -42,7 +83,7 @@
                     @Html.LabelFor(m => m.LastName):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.LastName)
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "wide" })
                 </dd>
             </dl>
             <dl>
@@ -50,7 +91,7 @@
                     @Html.LabelFor(m => m.MobileNumber):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.MobileNumber)
+                    @Html.TextBoxFor(m => m.MobileNumber, new { @class = "wide" })
                 </dd>
             </dl>
             <dl>
@@ -58,7 +99,7 @@
                     @Html.LabelFor(m => m.Pin):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.Pin)
+                    @Html.TextBoxFor(m => m.Pin, new { @class = "wide" })
                 </dd>
             </dl>
             <dl>
@@ -66,7 +107,7 @@
                     @Html.LabelFor(m => m.OrderNumber):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.OrderNumber)
+                    @Html.TextBoxFor(m => m.OrderNumber, new { @class = "wide" })
                 </dd>
             </dl>
             <dl>
@@ -74,7 +115,7 @@
                     @Html.LabelFor(m => m.PortinNumber):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.PortinNumber)
+                    @Html.TextBoxFor(m => m.PortinNumber, new {@class = "wide"})
                 </dd>
             </dl>
             <dl>
@@ -92,7 +133,8 @@
                               dataSource.Read(read => read.Action("GetCategories", "Sales"))
                                   .ServerFiltering(true);
                           })
-                          )
+                          .HtmlAttributes(new { @class = "wide" })
+                    )
                     @Html.ValidationMessageFor(m => m.CategoryId)
                 </dd>
             </dl>
@@ -112,28 +154,80 @@
                                   .ServerFiltering(true);
                           })
                           .CascadeFrom("CategoryId")
-                          )
+                          .HtmlAttributes(new { @class = "wide" })
+                          .Events(e => e.Change("onPlanChange"))
+                    )
                     @Html.ValidationMessageFor(m => m.PlanId)
                 </dd>
             </dl>
         </div>
-        <div style="overflow: hidden;">
+        <div style="overflow: hidden; padding-left: 2px">
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.Type):
+                </dt>
+                <dd>
+                    @(Html.Kendo().DropDownListFor(m => m.Type)
+                            .ValuePrimitive(true)
+                            //.HtmlAttributes(new { data_value_primitive = "true" })
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .OptionLabel("Select IMEI Type...")
+                                .ValuePrimitive(true)
+                        .BindTo(HelperMethods.EnumToSelectList(typeof(InventoryType)))
+                                .HtmlAttributes(new { @class = "wide" })
+                    )
+                    @Html.ValidationMessageFor(m => m.Type)
+                </dd>
+            </dl>
             <dl>
                 <dt>
                     @Html.LabelFor(m => m.IMEI):
                 </dt>
                 <dd>
-                    @(Html.Kendo().ComboBoxFor(m => m.InventoryId)
+                    @(Html.Kendo().DropDownListFor(m => m.InventoryId)
                           .AutoBind(true)
+                 .ValuePrimitive(true)
+                          //.HtmlAttributes(new {data_value_primitive = "true"})
+                          .OptionLabel("Select IMEI...")
                           .DataTextField("IMEI")
                           .DataValueField("InventoryId")
                           .DataSource(dataSource =>
                           {
-                              dataSource.Read(read => read.Action("GetIMEI", "Sales"))
+                              dataSource.Read(read => read.Action("GetIMEIs", "Sales").Data("filterIMEIs"))
                                   .ServerFiltering(true);
                           })
+                          .CascadeFrom("Type")
+                          .Events(e => e.DataBound("dataBound"))
+                          //.Events(e => { e.Change("onChange");
+                          //                 e.Cascade("onIMEICascade");
+                          //})
+                          .Events(e => e.Change("onChange"))
+                          .HtmlAttributes(new {@class = "wide"})
                           )
                     @Html.ValidationMessageFor(m => m.IMEI)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.LabelFor(m => m.ProductCategoryId):
+                </dt>
+                <dd>
+                    @(Html.Kendo().DropDownListFor(m => m.ProductCategoryId)
+                          .AutoBind(true)
+                          .OptionLabel("Select Product Category...")
+                          .DataTextField("ProductCategoryName")
+                          .DataValueField("ProductCategoryId")
+                          .DataSource(dataSource =>
+                          {
+                              dataSource.Read(read => read.Action("GetProductCategories", "Sales").Data("filterProductCategory"))
+                                  .ServerFiltering(true);
+                          })
+                          .Events(e => e.DataBound("dataBound"))
+                          //.Events(e => e.Cascade("onPrdCategoryCasecade"))
+                          .HtmlAttributes(new { @class = "wide" })
+                    )
+                    @Html.ValidationMessageFor(m => m.ProductCategoryId)
                 </dd>
             </dl>
             <dl>
@@ -151,9 +245,10 @@
                               dataSource.Read(read => read.Action("GetProducts", "Sales").Data("filterProduct"))
                                   .ServerFiltering(true);
                           })
-                          .CascadeFrom("InventoryId")
+                          .CascadeFrom("ProductCategoryId")
                           .Events(e => e.DataBound("dataBound"))
-                          )
+                          .HtmlAttributes(new { @class = "wide" })
+                    )
 
                     @Html.ValidationMessageFor(m => m.ProductId)
                 </dd>
@@ -163,7 +258,7 @@
                     @Html.LabelFor(m => m.RefferA):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.RefferA)
+                    @Html.TextBoxFor(m => m.RefferA, new {@class = "wide"})
                 </dd>
             </dl>
             <dl>
@@ -171,7 +266,7 @@
                     @Html.LabelFor(m => m.RefferB):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.RefferB)
+                    @Html.TextBoxFor(m => m.RefferB, new {@class = "wide"})
                 </dd>
             </dl>
             <dl>
@@ -179,7 +274,27 @@
                     @Html.LabelFor(m => m.Gift):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.Gift)
+                    @Html.TextBoxFor(m => m.Gift, new {@class = "wide"})
+                </dd>
+            </dl>
+            <dl @if (!HttpContext.Current.User.IsInRole("Admin"))
+                {
+                    <text>hidden</text>
+                }>
+                <dt>
+                    @Html.LabelFor(m => m.Audit):
+                </dt>
+                <dd>
+                    @(Html.Kendo().DropDownListFor(m => m.Audit)
+                            .ValuePrimitive(true)
+                          //.HtmlAttributes(new {data_value_primitive = "true"})
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .OptionLabel("Select Audit Result...")
+                          .BindTo(HelperMethods.EnumToSelectList(typeof (AuditType)))
+                          .HtmlAttributes(new {@class = "wide"})
+                          )
+                    @Html.ValidationMessageFor(m => m.Audit)
                 </dd>
             </dl>
             <dl>
@@ -187,7 +302,7 @@
                     @Html.LabelFor(m => m.Note):
                 </dt>
                 <dd>
-                    @Html.TextBoxFor(m => m.Note)
+                    @Html.TextBoxFor(m => m.Note, new {@class = "wide"})
                 </dd>
             </dl>
         </div>
@@ -203,5 +318,10 @@ input[type="text"]{
           -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
+}
+
+.wide
+{
+     width: 245px;
 }
 </style>

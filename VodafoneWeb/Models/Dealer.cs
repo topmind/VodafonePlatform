@@ -18,8 +18,8 @@ namespace VodafoneWeb.Models
         [DefaultValue(true)]
         public bool IsActive { get; set; }
 
-        public virtual ICollection<SalesTransaction> Sales { get; set; }
+        public virtual List<SalesTransaction> Sales { get; set; }
 
-        public virtual ICollection<Inventory> Inventories { get; set; } 
+        public virtual List<Inventory> Inventories { get; set; } 
     }
 }

@@ -17,5 +17,9 @@ namespace VodafoneWeb.Models
         //public string IMEI { get; set; }
         [DefaultValue(true)]
         public bool IsActive { get; set; }
+
+        public int ProductCategoryId { get; set; }
+
+        public virtual ProductCategory ProductCategory { get; set; }
     }
 }

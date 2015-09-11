@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Microsoft.AspNet.Identity.Owin;
 using VodafoneWeb.Models;
 
@@ -139,7 +140,7 @@ namespace VodafoneWeb.Controllers
         {
             int selectedDealerId = int.Parse(Request.Form["DealerId"]);
             HelperMethods.SetDealerId(selectedDealerId);
-            return RedirectToAction("Index", "Sales");
+            return RedirectToAction("Index", "Home");
         }
 
         //public async Task<ActionResult> _SelectedDealer()
@@ -158,13 +159,17 @@ namespace VodafoneWeb.Controllers
         //}
 
         // Get: Dealers/SelectOtherDealer
-        public ActionResult SelectOtherDealer()
+        public ActionResult SelectOtherDealer(int? inventoryId)
         {
             int? currentDealerId = HelperMethods.GetDealerId();
             if(!currentDealerId.HasValue)
                 return HttpNotFound();
             var data = db.Dealers.Select(c => new DealerViewModel { DealerId = c.DealerId, DealerName = c.DealerName, DealerCode = c.DealerCode })
                 .Where(c => c.DealerId != currentDealerId.Value);
+            if (TempData.ContainsKey("InventoryId"))
+                TempData["InventoryId"] = inventoryId;
+            else
+                TempData.Add("InventoryId", inventoryId);
             return PartialView(data);
         }
 
@@ -173,7 +178,8 @@ namespace VodafoneWeb.Controllers
         [ValidateAntiForgeryToken]
         public RedirectToRouteResult SelectOtherDealer(int DealerId)
         {
-            return RedirectToAction("TransferTo", "Inventory", DealerId);
+            //var tt = TempData["InventoryId"];
+            return RedirectToAction("TransferTo", "Inventory", new { dealerId = DealerId });
         }
 
         protected override void Dispose(bool disposing)
