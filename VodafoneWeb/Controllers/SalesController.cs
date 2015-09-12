@@ -97,7 +97,8 @@ namespace VodafoneWeb.Controllers
                     {
                         Type = salestransaction.Inventory.Type,
                         InventoryId = salestransaction.Inventory.InventoryId,
-                        IMEI = salestransaction.Inventory.IMEI
+                        IMEI = salestransaction.Inventory.IMEI,
+                        Status = salestransaction.Inventory.Status
                     } : null,
                     IMEI = salestransaction.Inventory != null? salestransaction.Inventory.IMEI : null,
                     ProductCategoryId = salestransaction.Product.ProductCategoryId,
@@ -434,7 +435,7 @@ namespace VodafoneWeb.Controllers
         }
 
 
-        public JsonResult GetIMEIs(InventoryType type)
+        public JsonResult GetIMEIs(InventoryType type, int? inventoryId, string IMEI)
         {
             var list = new List<SalesInventoryViewModel>();
             var dealerId = HelperMethods.GetDealerId();
@@ -463,6 +464,14 @@ namespace VodafoneWeb.Controllers
                             IMEI = inventory.IMEI
                         });
                     }
+                if (inventoryId.HasValue && !string.IsNullOrEmpty(IMEI))
+                {
+                    list.Add(new SalesInventoryViewModel
+                    {
+                        InventoryId = inventoryId.Value,
+                        IMEI = IMEI
+                    });
+                }
             }
             return Json(list, JsonRequestBehavior.AllowGet);
         }

@@ -199,8 +199,9 @@ namespace VodafoneWeb.Controllers
                 changeHistory2.ChangeDate = data.StockInDate;
                 changeHistory2.OldOperationType = null;
                 changeHistory2.NewOperationType = InventoryOperationType.In;
-                changeHistory2.OperatedByEmployeeID = data.StockInBy.Id;
-                changeHistory2.ToDealer = data.Dealer.DealerName;
+                changeHistory2.OperatedByEmployeeID = data.StockInById;
+                var result = await HelperMethods.GetCurrentDealer();
+                changeHistory2.ToDealer = result.DealerName;
                 db.InvetoryChangeHistories.Add(changeHistory2);
 
                 await db.SaveChangesAsync();

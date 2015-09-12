@@ -101,10 +101,18 @@
     function onEdit(e) {
         //attach validator to the PopUp window
         $("[data-role=window]").kendoValidator();
+
+        //Bind deactivate event to the Popup window
+        e.container.data("kendoWindow").bind("deactivate", function() {
+            formatGridRows();
+        });
     }
 
     function onDataBound(e) {
+        formatGridRows();
+    }
 
+    function formatGridRows() {
         var isAdmin = "@HttpContext.Current.User.IsInRole("Admin")";
         var bIsAdmin;
         if (isAdmin == "True") {
@@ -115,35 +123,35 @@
         //alert(bIsAdmin);
         if (bIsAdmin)
         {
-        var grid = $("#grid").data("kendoGrid");
-        var gridData = grid.dataSource.view();
+            var grid = $("#grid").data("kendoGrid");
+            var gridData = grid.dataSource.view();
 
-        for (var i = 0; i < gridData.length; i++) {
-            //get the item uid
-            var currentUid = gridData[i].uid;
-            //if the record fits the custom condition
-            if (gridData[i].Audit == 3) {
-                //find the row based on the uid and the custom class
-                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
-                $(currenRow).addClass("incorrectClass");
-            }
-            else if (gridData[i].Audit == 1) {
-                //find the row based on the uid and the custom class
-                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
-                $(currenRow).addClass("unpaidClass");
-            }
-            else if (gridData[i].Audit == 0) {
-                //find the row based on the uid and the custom class
-                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
-                $(currenRow).addClass("paidClass");
-            }
-            //alert(gridData[i].IsChanged);
-            if (gridData[i].IsChanged) {
-                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
-                $(currenRow).addClass("isChangedClass");
+            for (var i = 0; i < gridData.length; i++) {
+                //get the item uid
+                var currentUid = gridData[i].uid;
+                //if the record fits the custom condition
+                if (gridData[i].Audit == 3) {
+                    //find the row based on the uid and the custom class
+                    var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                    $(currenRow).addClass("incorrectClass");
+                }
+                else if (gridData[i].Audit == 1) {
+                    //find the row based on the uid and the custom class
+                    var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                    $(currenRow).addClass("unpaidClass");
+                }
+                else if (gridData[i].Audit == 0) {
+                    //find the row based on the uid and the custom class
+                    var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                    $(currenRow).addClass("paidClass");
+                }
+                //alert(gridData[i].IsChanged);
+                if (gridData[i].IsChanged) {
+                    var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                    $(currenRow).addClass("isChangedClass");
+                }
             }
         }
-}
     }
 </script>
 

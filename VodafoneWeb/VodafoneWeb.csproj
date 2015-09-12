@@ -891,6 +891,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\DealersController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IMEIHistoryController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
@@ -905,13 +906,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HelperMethods.cs" />
-    <Compile Include="Migrations\201509081344105_Initial_Create.cs" />
-    <Compile Include="Migrations\201509081344105_Initial_Create.Designer.cs">
-      <DependentUpon>201509081344105_Initial_Create.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201509101226059_update_changehistory.cs" />
-    <Compile Include="Migrations\201509101226059_update_changehistory.Designer.cs">
-      <DependentUpon>201509101226059_update_changehistory.cs</DependentUpon>
+    <Compile Include="Migrations\201509121521309_Initial_Create.cs" />
+    <Compile Include="Migrations\201509121521309_Initial_Create.Designer.cs">
+      <DependentUpon>201509121521309_Initial_Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -949,11 +946,11 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201509081344105_Initial_Create.resx">
-      <DependentUpon>201509081344105_Initial_Create.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201509101226059_update_changehistory.resx">
-      <DependentUpon>201509101226059_update_changehistory.cs</DependentUpon>
+    <Folder Include="Views\Error\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201509121521309_Initial_Create.resx">
+      <DependentUpon>201509121521309_Initial_Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

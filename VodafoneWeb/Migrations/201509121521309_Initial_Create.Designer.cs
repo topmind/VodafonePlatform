@@ -13,7 +13,7 @@ namespace VodafoneWeb.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201509081344105_Initial_Create"; }
+            get { return "201509121521309_Initial_Create"; }
         }
         
         string IMigrationMetadata.Source

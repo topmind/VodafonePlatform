@@ -13,5 +13,7 @@ namespace VodafoneWeb.Models
         public int InventoryId { get; set; }
 
         public string IMEI { get; set; }
+
+        public InventoryOperationType Status { get; set; }
     }
 }

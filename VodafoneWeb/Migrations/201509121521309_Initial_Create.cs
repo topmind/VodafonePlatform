@@ -203,7 +203,7 @@ namespace VodafoneWeb.Migrations
                         InvetoryChangeHistoryId = c.Int(nullable: false, identity: true),
                         IMEI = c.String(maxLength: 450),
                         ChangeDate = c.DateTime(nullable: false),
-                        OldOperationType = c.Int(nullable: false),
+                        OldOperationType = c.Int(),
                         NewOperationType = c.Int(nullable: false),
                         OperatedByEmployeeID = c.String(),
                         SalesId = c.Int(),

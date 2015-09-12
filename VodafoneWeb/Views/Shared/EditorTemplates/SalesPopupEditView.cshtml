@@ -11,21 +11,42 @@
 
     function filterProduct() {
         return {
-            inventoryId: $("#InventoryId").data("kendoDropDownList").value(),
+            inventoryId: $("#InventoryId").data("kendoComboBox").value(),
             productCategoryId: $("#ProductCategoryId").data("kendoDropDownList").value()
         };
     }
 
     function filterProductCategory() {
         return {
-            inventoryId: $("#InventoryId").data("kendoDropDownList").value()
+            inventoryId: $("#InventoryId").data("kendoComboBox").value()
         };
     }
 
     function filterIMEIs() {
-        return {
-            type: $("#Type").data("kendoDropDownList").value()
-        };
+        var row = $(event.srcElement).closest("tr");
+        var grid = $(event.srcElement).closest("[data-role=grid]").data("kendoGrid");
+        if (grid != null) {
+            var dataItem = grid.dataItem(row);
+            if (dataItem != null) {
+                return {
+                    type: $("#Type").data("kendoDropDownList").value(),
+                    inventoryId: dataItem.InventoryId,
+                    IMEI: dataItem.IMEI
+                };
+            } else {
+                return {
+                    type: $("#Type").data("kendoDropDownList").value(),
+                    inventoryId: null,
+                    IMEI: null
+                };
+            }
+        } else {
+            return {
+                type: $("#Type").data("kendoDropDownList").value(),
+                inventoryId: null,
+                IMEI: null
+            };
+        }
     }
 
     function dataBound(e) {
@@ -38,15 +59,25 @@
         }
     }
 
+    function dataBoundCombo(e) {
+        if (this.dataSource.data().length == 1) {
+            var that = this;
+            setTimeout(function () {
+                that.select(0);
+                that.trigger("change");
+            });
+        }
+    }
+
     function onChange() {
-        var selectid = $("#InventoryId").data("kendoDropDownList").value();
+        var selectid = $("#InventoryId").data("kendoComboBox").value();
         $.getJSON("Sales/GetProductCategories?inventoryId=" + selectid, function (data) {
             $("#ProductCategoryId").data("kendoDropDownList").dataSource.data(data);
         });
         $.getJSON("Sales/GetProducts?inventoryId=" + selectid, function (data) {
-             $("#ProductId").data("kendoDropDownList").dataSource.data(data);
+            $("#ProductId").data("kendoDropDownList").dataSource.data(data);
         });
-        
+
     }
 
     function onPlanChange() {
@@ -185,11 +216,9 @@
                     @Html.LabelFor(m => m.IMEI):
                 </dt>
                 <dd>
-                    @(Html.Kendo().DropDownListFor(m => m.InventoryId)
+                    @(Html.Kendo().ComboBoxFor(m => m.InventoryId)
                           .AutoBind(true)
                  .ValuePrimitive(true)
-                          //.HtmlAttributes(new {data_value_primitive = "true"})
-                          .OptionLabel("Select IMEI...")
                           .DataTextField("IMEI")
                           .DataValueField("InventoryId")
                           .DataSource(dataSource =>
@@ -198,12 +227,13 @@
                                   .ServerFiltering(true);
                           })
                           .CascadeFrom("Type")
-                          .Events(e => e.DataBound("dataBound"))
-                          //.Events(e => { e.Change("onChange");
-                          //                 e.Cascade("onIMEICascade");
-                          //})
-                          .Events(e => e.Change("onChange"))
+                          .Events(e =>
+                          {
+                              e.Change("onChange");
+                              e.DataBound("dataBoundCombo");
+                          })
                           .HtmlAttributes(new {@class = "wide"})
+                          .Suggest(true)
                           )
                     @Html.ValidationMessageFor(m => m.IMEI)
                 </dd>
